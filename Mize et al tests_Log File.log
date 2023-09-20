@@ -1,0 +1,2299 @@
+------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  C:\Users\clyons\Desktop\Redlining\Mize et al tests.log
+  log type:  text
+ opened on:  18 Sep 2023, 10:53:55
+
+. 
+. use "C:\Users\clyons\Desktop\Redlining\HOLC and NNCS2_Socius.dta", clear
+
+. 
+. drop if t_f4ro10 ==. | t_disd40==.
+(5,568 observations deleted)
+
+. 
+. gen interval2010 = INTERVAL2010
+(871 missing values generated)
+
+. 
+.                    
+. **clone the DV for each model of violent crime and property**
+. 
+. clonevar hrM1 = t_hr2rd
+(104 missing values generated)
+
+. lab var  hrM1 "M1 base model"
+
+. clonevar hrM2 = t_hr2rd
+(104 missing values generated)
+
+. lab var  hrM2 "M2 basemodel + control"  
+
+. clonevar hrM3 = t_hr2rd
+(104 missing values generated)
+
+. lab var  hrM3 "M3 +segregation v. M2"
+
+. clonevar hrM4 = t_hr2rd
+(104 missing values generated)
+
+. lab var  hrM4 "M4 +housing v. M2"
+
+. clonevar hrM5 = t_hr2rd
+(104 missing values generated)
+
+. lab var  hrM5 "M5 +disad v. M2"
+
+. clonevar hrM6 = t_hr2rd
+(104 missing values generated)
+
+. lab var  hrM6 "M6 full model"
+
+. 
+. clonevar bM1 = t_bg2rd
+
+. lab var  bM1 "M1 base model"
+
+. clonevar bM2 = t_bg2rd
+
+. lab var  bM2 "M2 basemodel + control"   
+
+. clonevar bM3 = t_bg2rd
+
+. lab var  bM3 "M3 +segregation v. M2"
+
+. clonevar bM4 = t_bg2rd
+
+. lab var  bM4 "M4 +housing v. M2"
+
+. clonevar bM5 = t_bg2rd
+
+. lab var  bM5 "M5 +disad v. M2"
+
+. clonevar bM6 = t_bg2rd
+
+. lab var  bM6 "M6 full model"       
+
+. 
+. set matsize 10000
+
+. 
+. 
+. **Violence
+. 
+. **m1 v m2
+. 
+. gsem (hrM1 <-  i.interval2010  M1[city_id], nbreg exp (t_pop102)) ///
+>          (hrM2 <- i.interval2010 t_disd40 t_pcblk40 t_medhv40 t_lnpo22 t_frbr2 t_m5242 c_pop082 c_pblk2 c_phisp2
+>  c_dsdc2 c_pmov52 c_pvac2 c_dswb12 c_south2 c_west2 M1[city_id], nbreg exp (t_pop102)), vce(cluster city_id)
+
+Fitting fixed-effects model:
+
+Iteration 0:   log likelihood = -38773.596  
+Iteration 1:   log likelihood = -38310.087  
+Iteration 2:   log likelihood = -38230.642  
+Iteration 3:   log likelihood = -38230.578  
+Iteration 4:   log likelihood = -38230.578  
+
+Refining starting values:
+
+Grid node 0:   log likelihood = -37808.997
+
+Fitting full model:
+
+Iteration 0:   log pseudolikelihood = -37808.997  (not concave)
+Iteration 1:   log pseudolikelihood = -37796.417  (not concave)
+Iteration 2:   log pseudolikelihood = -37719.068  
+Iteration 3:   log pseudolikelihood = -37664.589  
+Iteration 4:   log pseudolikelihood = -37610.284  (not concave)
+Iteration 5:   log pseudolikelihood = -37600.049  
+Iteration 6:   log pseudolikelihood = -37598.216  
+Iteration 7:   log pseudolikelihood = -37597.316  
+Iteration 8:   log pseudolikelihood =  -37597.26  
+Iteration 9:   log pseudolikelihood =  -37597.26  
+
+Generalized structural equation model           Number of obs     =      3,821
+
+Response       : hrM1
+Family         : nbinomial
+Dispersion     : mean
+Link           : log
+
+Response       : hrM2
+Family         : nbinomial
+Dispersion     : mean
+Link           : log
+
+Log pseudolikelihood =  -37597.26
+
+ ( 1)  [hrM1]M1[city_id] = 1
+                                  (Std. Err. adjusted for 27 clusters in city_id)
+---------------------------------------------------------------------------------
+                |               Robust
+                |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+----------------+----------------------------------------------------------------
+hrM1 <-         |
+                |
+   interval2010 |
+             2  |   .5235791   .0850247     6.16   0.000     .3569337    .6902246
+             3  |   .9202549   .1129665     8.15   0.000     .6988447    1.141665
+             4  |   1.120337   .1182787     9.47   0.000     .8885146    1.352159
+                |
+    M1[city_id] |          1  (constrained)
+                |
+          _cons |  -4.936204   .1626257   -30.35   0.000    -5.254945   -4.617464
+   ln(t_pop102) |          1  (exposure)
+----------------+----------------------------------------------------------------
+hrM2 <-         |
+                |
+   interval2010 |
+             2  |   .5052192   .1092874     4.62   0.000     .2910197    .7194186
+             3  |   .7950131   .1573777     5.05   0.000     .4865584    1.103468
+             4  |   .7788846   .2011087     3.87   0.000     .3847188     1.17305
+                |
+       t_disd40 |    .260929   .0742126     3.52   0.000     .1154749    .4063831
+      t_pcblk40 |   .0429495   .0950537     0.45   0.651    -.1433523    .2292513
+      t_medhv40 |   .0000256   .0000147     1.75   0.080    -3.11e-06    .0000543
+       t_lnpo22 |  -.2414378   .0330272    -7.31   0.000      -.30617   -.1767057
+        t_frbr2 |  -.0094538   .0077152    -1.23   0.220    -.0245752    .0056676
+        t_m5242 |   .0231523   .0075671     3.06   0.002     .0083211    .0379835
+       c_pop082 |  -3.89e-08   3.67e-08    -1.06   0.289    -1.11e-07    3.30e-08
+        c_pblk2 |   .0011891   .0031491     0.38   0.706    -.0049831    .0073613
+       c_phisp2 |   .0030023   .0033947     0.88   0.376    -.0036512    .0096558
+        c_dsdc2 |  -.0189637   .0388509    -0.49   0.625    -.0951101    .0571827
+       c_pmov52 |  -.0155344   .0098961    -1.57   0.116    -.0349303    .0038616
+        c_pvac2 |   -.006713   .0116159    -0.58   0.563    -.0294798    .0160539
+       c_dswb12 |   .0031816   .0038577     0.82   0.410    -.0043793    .0107424
+       c_south2 |  -.1369587   .0918932    -1.49   0.136    -.3170661    .0431486
+        c_west2 |   .2192235   .1382773     1.59   0.113     -.051795     .490242
+                |
+    M1[city_id] |   .9549864   .0666159    14.34   0.000     .8244216    1.085551
+                |
+          _cons |   -4.54209   .3078446   -14.75   0.000    -5.145454   -3.938725
+   ln(t_pop102) |          1  (exposure)
+----------------+----------------------------------------------------------------
+hrM1            |
+       /lnalpha |  -.5728729   .1178983    -4.86   0.000    -.8039492   -.3417965
+----------------+----------------------------------------------------------------
+hrM2            |
+       /lnalpha |   -.656631   .1086105    -6.05   0.000    -.8695036   -.4437585
+----------------+----------------------------------------------------------------
+var(M1[city_id])|   .2774488   .0624692                      .1784555    .4313558
+---------------------------------------------------------------------------------
+
+.         
+.         est store gsemvio1_2            
+
+.         
+.         
+. **m2 v m3       
+. gsem (hrM2 <- i.interval2010 t_disd40 t_pcblk40 t_medhv40 t_lnpo22 t_frbr2 t_m5242 c_pop082 c_pblk2 c_phisp2 c_d
+> sdc2 c_pmov52 c_pvac2 c_dswb12 c_south2 c_west2 M1[city_id], nbreg exp (t_pop102)) ///
+>          (hrM3 <- i.interval2010 t_disd40 t_pcblk40 t_medhv40 i.nraceth_new2 t_lnpo22 t_frbr2 t_m5242 c_pop082 c
+> _pblk2 c_phisp2 c_dsdc2 c_pmov52 c_pvac2 c_dswb12 c_south2 c_west2 M1[city_id], nbreg exp (t_pop102)), vce(clust
+> er city_id)
+
+Fitting fixed-effects model:
+
+Iteration 0:   log likelihood = -38061.388  
+Iteration 1:   log likelihood = -37364.834  
+Iteration 2:   log likelihood = -37121.055  
+Iteration 3:   log likelihood = -37119.336  
+Iteration 4:   log likelihood = -37119.335  
+
+Refining starting values:
+
+Grid node 0:   log likelihood = -36911.174
+
+Fitting full model:
+
+Iteration 0:   log pseudolikelihood = -36911.174  (not concave)
+Iteration 1:   log pseudolikelihood = -36904.075  (not concave)
+Iteration 2:   log pseudolikelihood = -36897.185  (not concave)
+Iteration 3:   log pseudolikelihood = -36894.511  
+Iteration 4:   log pseudolikelihood = -36890.696  
+Iteration 5:   log pseudolikelihood = -36876.602  
+Iteration 6:   log pseudolikelihood = -36872.581  
+Iteration 7:   log pseudolikelihood = -36872.568  
+Iteration 8:   log pseudolikelihood = -36872.568  
+
+Generalized structural equation model           Number of obs     =      3,821
+
+Response       : hrM2
+Family         : nbinomial
+Dispersion     : mean
+Link           : log
+
+Response       : hrM3
+Family         : nbinomial
+Dispersion     : mean
+Link           : log
+
+Log pseudolikelihood = -36872.568
+
+ ( 1)  [hrM2]M1[city_id] = 1
+                                  (Std. Err. adjusted for 27 clusters in city_id)
+---------------------------------------------------------------------------------
+                |               Robust
+                |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+----------------+----------------------------------------------------------------
+hrM2 <-         |
+                |
+   interval2010 |
+             2  |   .5095772   .1094166     4.66   0.000     .2951246    .7240298
+             3  |   .7964758   .1632062     4.88   0.000     .4765976    1.116354
+             4  |    .760442    .212452     3.58   0.000     .3440437     1.17684
+                |
+       t_disd40 |   .2872423   .0810851     3.54   0.000     .1283185    .4461661
+      t_pcblk40 |   .0159367   .1003646     0.16   0.874    -.1807744    .2126478
+      t_medhv40 |   .0000301   .0000131     2.30   0.021     4.46e-06    .0000557
+       t_lnpo22 |  -.2587715   .0309269    -8.37   0.000    -.3193872   -.1981558
+        t_frbr2 |  -.0094507   .0081062    -1.17   0.244    -.0253386    .0064372
+        t_m5242 |   .0238978   .0073976     3.23   0.001     .0093989    .0383968
+       c_pop082 |  -1.84e-07   1.55e-07    -1.19   0.235    -4.89e-07    1.20e-07
+        c_pblk2 |  -.0037876   .0065295    -0.58   0.562    -.0165852      .00901
+       c_phisp2 |   .0041158   .0084832     0.49   0.628     -.012511    .0207426
+        c_dsdc2 |   .0493314   .1779028     0.28   0.782    -.2993518    .3980145
+       c_pmov52 |    -.05893    .029686    -1.99   0.047    -.1171135   -.0007466
+        c_pvac2 |   .0442032   .0262939     1.68   0.093    -.0073319    .0957383
+       c_dswb12 |    .024402   .0064656     3.77   0.000     .0117297    .0370744
+       c_south2 |    .005679   .1589654     0.04   0.972    -.3058875    .3172455
+        c_west2 |   .1454909   .2376563     0.61   0.540    -.3203069    .6112888
+                |
+    M1[city_id] |          1  (constrained)
+                |
+          _cons |  -5.454689   .3767494   -14.48   0.000    -6.193104   -4.716274
+   ln(t_pop102) |          1  (exposure)
+----------------+----------------------------------------------------------------
+hrM3 <-         |
+                |
+   interval2010 |
+             2  |   .3635404   .0569239     6.39   0.000     .2519716    .4751092
+             3  |   .4970056   .0825108     6.02   0.000     .3352874    .6587238
+             4  |   .4749876   .1240185     3.83   0.000     .2319157    .7180595
+                |
+       t_disd40 |   .3455198   .0685567     5.04   0.000     .2111511    .4798886
+      t_pcblk40 |  -.4323908   .1090064    -3.97   0.000    -.6460395   -.2187421
+      t_medhv40 |   .0000233   7.27e-06     3.21   0.001     9.06e-06    .0000375
+                |
+   nraceth_new2 |
+   Black-NNCS2  |   1.227859   .1375322     8.93   0.000     .9583011    1.497418
+  Latino-NNCS2  |   .6579453   .0786475     8.37   0.000     .5037989    .8120916
+   Minor-NNCS2  |   1.070574   .0693347    15.44   0.000     .9346805    1.206468
+ W-B Int-NNCS2  |   .7199161   .0651553    11.05   0.000      .592214    .8476182
+ W-H Int-NNCS2  |   .3425563   .0801143     4.28   0.000     .1855352    .4995774
+ Oth Int-NNCS2  |   .6089003   .0788551     7.72   0.000     .4543472    .7634535
+                |
+       t_lnpo22 |  -.2061006   .0273421    -7.54   0.000    -.2596901   -.1525111
+        t_frbr2 |  -.0045374   .0046651    -0.97   0.331    -.0136807     .004606
+        t_m5242 |   .0114172   .0037384     3.05   0.002     .0040901    .0187443
+       c_pop082 |  -1.76e-07   1.62e-07    -1.08   0.278    -4.93e-07    1.42e-07
+        c_pblk2 |  -.0114143   .0059485    -1.92   0.055     -.023073    .0002445
+       c_phisp2 |  -.0027974   .0081093    -0.34   0.730    -.0186914    .0130966
+        c_dsdc2 |   .0533658    .172139     0.31   0.757    -.2840204     .390752
+       c_pmov52 |  -.0464871   .0282749    -1.64   0.100     -.101905    .0089307
+        c_pvac2 |   .0426439   .0229927     1.85   0.064    -.0024209    .0877086
+       c_dswb12 |    .021438   .0062056     3.45   0.001     .0092751    .0336008
+       c_south2 |   .0646828   .1562482     0.41   0.679     -.241558    .3709237
+        c_west2 |   .1267707   .2132324     0.59   0.552    -.2911572    .5446986
+                |
+    M1[city_id] |   .9658109   .0474708    20.35   0.000     .8727699    1.058852
+                |
+          _cons |  -5.553877   .3242219   -17.13   0.000     -6.18934   -4.918414
+   ln(t_pop102) |          1  (exposure)
+----------------+----------------------------------------------------------------
+hrM2            |
+       /lnalpha |  -.6569992   .1085508    -6.05   0.000    -.8697549   -.4442435
+----------------+----------------------------------------------------------------
+hrM3            |
+       /lnalpha |  -.9357148   .1266961    -7.39   0.000    -1.184035   -.6873951
+----------------+----------------------------------------------------------------
+var(M1[city_id])|   .0819061   .0367453                      .0339973    .1973276
+---------------------------------------------------------------------------------
+
+.         
+.         est store gsemvio2_3    
+
+. 
+. 
+. **m2 v m4       
+. gsem (hrM2 <- i.interval2010 t_disd40 t_pcblk40 t_medhv40 t_lnpo22 t_frbr2 t_m5242 c_pop082 c_pblk2 c_phisp2 c_d
+> sdc2 c_pmov52 c_pvac2 c_dswb12 c_south2 c_west2 M1[city_id], nbreg exp (t_pop102)) ///
+>         (hrM4 <- i.interval2010 t_disd40 t_pcblk40 t_medhv40 t_lnpo22 t_frbr2 t_m5242 t_lgloanhu t_pvac2 t_f4ro1
+> 0 t_homeown2 c_pop082 c_pblk2 c_phisp2 c_dsdc2 c_pmov52 c_pvac2 c_dswb12 c_south2 c_west2 M1[city_id], nbreg exp
+>  (t_pop102)), vce(cluster city_id)
+
+Fitting fixed-effects model:
+
+Iteration 0:   log likelihood = -38031.588  
+Iteration 1:   log likelihood =  -37319.87  
+Iteration 2:   log likelihood = -37054.116  
+Iteration 3:   log likelihood = -37051.902  
+Iteration 4:   log likelihood = -37051.899  
+
+Refining starting values:
+
+Grid node 0:   log likelihood = -36854.459
+
+Fitting full model:
+
+Iteration 0:   log pseudolikelihood = -36854.459  (not concave)
+Iteration 1:   log pseudolikelihood = -36847.296  (not concave)
+Iteration 2:   log pseudolikelihood =  -36840.28  (not concave)
+Iteration 3:   log pseudolikelihood = -36837.403  (not concave)
+Iteration 4:   log pseudolikelihood = -36830.487  
+Iteration 5:   log pseudolikelihood = -36824.954  
+Iteration 6:   log pseudolikelihood = -36820.394  
+Iteration 7:   log pseudolikelihood = -36818.932  
+Iteration 8:   log pseudolikelihood = -36818.921  
+Iteration 9:   log pseudolikelihood = -36818.921  
+
+Generalized structural equation model           Number of obs     =      3,821
+
+Response       : hrM2
+Family         : nbinomial
+Dispersion     : mean
+Link           : log
+
+Response       : hrM4
+Family         : nbinomial
+Dispersion     : mean
+Link           : log
+
+Log pseudolikelihood = -36818.921
+
+ ( 1)  [hrM2]M1[city_id] = 1
+                                  (Std. Err. adjusted for 27 clusters in city_id)
+---------------------------------------------------------------------------------
+                |               Robust
+                |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+----------------+----------------------------------------------------------------
+hrM2 <-         |
+                |
+   interval2010 |
+             2  |   .5074097   .1081487     4.69   0.000     .2954423    .7193772
+             3  |   .7952871   .1619154     4.91   0.000     .4779388    1.112635
+             4  |   .7608364   .2119755     3.59   0.000     .3453721    1.176301
+                |
+       t_disd40 |   .2798358   .0799214     3.50   0.000     .1231926    .4364789
+      t_pcblk40 |   .0207071   .1013337     0.20   0.838    -.1779032    .2193174
+      t_medhv40 |   .0000286   .0000138     2.07   0.038     1.52e-06    .0000557
+       t_lnpo22 |  -.2644837   .0313949    -8.42   0.000    -.3260165   -.2029508
+        t_frbr2 |  -.0101096   .0078849    -1.28   0.200    -.0255637    .0053446
+        t_m5242 |   .0236883   .0072981     3.25   0.001     .0093842    .0379923
+       c_pop082 |  -1.84e-07   1.55e-07    -1.19   0.234    -4.87e-07    1.19e-07
+        c_pblk2 |  -.0042118   .0067167    -0.63   0.531    -.0173764    .0089527
+       c_phisp2 |   .0047937   .0083171     0.58   0.564    -.0115076    .0210949
+        c_dsdc2 |   .0676985   .1717792     0.39   0.694    -.2689825    .4043795
+       c_pmov52 |  -.0579681   .0297509    -1.95   0.051    -.1162787    .0003425
+        c_pvac2 |   .0427762   .0265693     1.61   0.107    -.0092987    .0948512
+       c_dswb12 |   .0238131   .0067047     3.55   0.000     .0106721    .0369541
+       c_south2 |   .0177611   .1507614     0.12   0.906    -.2777258    .3132479
+        c_west2 |    .154172   .2357417     0.65   0.513    -.3078733    .6162172
+                |
+    M1[city_id] |          1  (constrained)
+                |
+          _cons |   -5.41091   .3837344   -14.10   0.000    -6.163016   -4.658804
+   ln(t_pop102) |          1  (exposure)
+----------------+----------------------------------------------------------------
+hrM4 <-         |
+                |
+   interval2010 |
+             2  |   .2158081    .056721     3.80   0.000      .104637    .3269793
+             3  |   .2722732   .0952044     2.86   0.004     .0856761    .4588704
+             4  |   .2665474   .1398595     1.91   0.057    -.0075721    .5406669
+                |
+       t_disd40 |   .2070563   .0679118     3.05   0.002     .0739517    .3401609
+      t_pcblk40 |  -.0563985   .0750593    -0.75   0.452     -.203512    .0907151
+      t_medhv40 |   .0000259   8.21e-06     3.15   0.002     9.81e-06     .000042
+       t_lnpo22 |  -.1274098   .0376454    -3.38   0.001    -.2011935   -.0536261
+        t_frbr2 |  -.0109199   .0055716    -1.96   0.050    -.0218401    2.30e-07
+        t_m5242 |   .0008724   .0039863     0.22   0.827    -.0069406    .0086853
+     t_lgloanhu |  -.3025527   .0281225   -10.76   0.000    -.3576718   -.2474335
+        t_pvac2 |   .0115213   .0034155     3.37   0.001      .004827    .0182156
+       t_f4ro10 |   .0023774   .0005613     4.24   0.000     .0012773    .0034775
+     t_homeown2 |  -.0081488   .0012033    -6.77   0.000    -.0105072   -.0057905
+       c_pop082 |  -2.03e-07   1.47e-07    -1.38   0.167    -4.91e-07    8.51e-08
+        c_pblk2 |   .0046522    .006263     0.74   0.458    -.0076232    .0169275
+       c_phisp2 |   .0092565   .0076176     1.22   0.224    -.0056737    .0241866
+        c_dsdc2 |  -.2033068   .1508224    -1.35   0.178    -.4989134    .0922998
+       c_pmov52 |  -.0497612   .0265885    -1.87   0.061    -.1018737    .0023513
+        c_pvac2 |   .0061028   .0206698     0.30   0.768    -.0344092    .0466148
+       c_dswb12 |   .0241523   .0061153     3.95   0.000     .0121665    .0361381
+       c_south2 |  -.0932761   .1419822    -0.66   0.511    -.3715561     .185004
+        c_west2 |   .2105294   .2081203     1.01   0.312    -.1973789    .6184377
+                |
+    M1[city_id] |   .9119212   .0587287    15.53   0.000      .796815    1.027027
+                |
+          _cons |  -4.229061   .3950464   -10.71   0.000    -5.003337   -3.454784
+   ln(t_pop102) |          1  (exposure)
+----------------+----------------------------------------------------------------
+hrM2            |
+       /lnalpha |  -.6553374   .1081428    -6.06   0.000    -.8672933   -.4433815
+----------------+----------------------------------------------------------------
+hrM4            |
+       /lnalpha |   -.966508   .1370036    -7.05   0.000     -1.23503   -.6979859
+----------------+----------------------------------------------------------------
+var(M1[city_id])|     .08102    .036335                      .0336398    .1951329
+---------------------------------------------------------------------------------
+
+.         
+.         est store gsemvio2_4    
+
+.         
+.         
+. **m2 v m5       
+. gsem (hrM2 <- i.interval2010 t_disd40 t_pcblk40 t_medhv40 t_lnpo22 t_frbr2 t_m5242 c_pop082 c_pblk2 c_phisp2 c_d
+> sdc2 c_pmov52 c_pvac2 c_dswb12 c_south2 c_west2 M1[city_id], nbreg exp (t_pop102)) ///  
+>         (hrM5 <- i.interval2010 t_disd40 t_pcblk40 t_medhv40 t_lnpo22 t_frbr2 t_m5242 t_dsdc2 c_pop082 c_pblk2 c
+> _phisp2 c_dsdc2 c_pmov52 c_pvac2 c_dswb12 c_south2 c_west2 M1[city_id], nbreg exp (t_pop102)), vce(cluster city_
+> id)
+
+Fitting fixed-effects model:
+
+Iteration 0:   log likelihood =  -38074.91  
+Iteration 1:   log likelihood = -37355.504  
+Iteration 2:   log likelihood = -37164.027  
+Iteration 3:   log likelihood = -37163.394  
+Iteration 4:   log likelihood = -37163.394  
+
+Refining starting values:
+
+Grid node 0:   log likelihood = -36956.363
+
+Fitting full model:
+
+Iteration 0:   log pseudolikelihood = -36956.363  (not concave)
+Iteration 1:   log pseudolikelihood = -36949.208  (not concave)
+Iteration 2:   log pseudolikelihood = -36942.255  (not concave)
+Iteration 3:   log pseudolikelihood = -36939.541  
+Iteration 4:   log pseudolikelihood = -36937.165  (backed up)
+Iteration 5:   log pseudolikelihood = -36928.569  
+Iteration 6:   log pseudolikelihood = -36920.228  
+Iteration 7:   log pseudolikelihood = -36920.203  
+Iteration 8:   log pseudolikelihood = -36920.203  
+
+Generalized structural equation model           Number of obs     =      3,821
+
+Response       : hrM2
+Family         : nbinomial
+Dispersion     : mean
+Link           : log
+
+Response       : hrM5
+Family         : nbinomial
+Dispersion     : mean
+Link           : log
+
+Log pseudolikelihood = -36920.203
+
+ ( 1)  [hrM2]M1[city_id] = 1
+                                  (Std. Err. adjusted for 27 clusters in city_id)
+---------------------------------------------------------------------------------
+                |               Robust
+                |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+----------------+----------------------------------------------------------------
+hrM2 <-         |
+                |
+   interval2010 |
+             2  |   .5058617   .1085408     4.66   0.000     .2931256    .7185978
+             3  |   .7923602   .1609099     4.92   0.000     .4769826    1.107738
+             4  |   .7572427   .2078159     3.64   0.000      .349931    1.164555
+                |
+       t_disd40 |   .2857126   .0794939     3.59   0.000     .1299074    .4415178
+      t_pcblk40 |   .0135677   .1021652     0.13   0.894    -.1866723    .2138077
+      t_medhv40 |    .000029    .000013     2.24   0.025     3.63e-06    .0000545
+       t_lnpo22 |   -.261489   .0300074    -8.71   0.000    -.3203024   -.2026756
+        t_frbr2 |   -.010112   .0080275    -1.26   0.208    -.0258456    .0056217
+        t_m5242 |   .0236863   .0072944     3.25   0.001     .0093895    .0379831
+       c_pop082 |  -1.92e-07   1.54e-07    -1.25   0.212    -4.94e-07    1.10e-07
+        c_pblk2 |  -.0042759   .0065722    -0.65   0.515    -.0171571    .0086053
+       c_phisp2 |   .0046005   .0083936     0.55   0.584    -.0118506    .0210517
+        c_dsdc2 |   .0552115   .1749756     0.32   0.752    -.2877344    .3981573
+       c_pmov52 |  -.0607234   .0296329    -2.05   0.040    -.1188028   -.0026441
+        c_pvac2 |   .0441947   .0262375     1.68   0.092    -.0072297    .0956192
+       c_dswb12 |   .0251127   .0065303     3.85   0.000     .0123135    .0379119
+       c_south2 |   .0041175   .1565385     0.03   0.979    -.3026923    .3109273
+        c_west2 |   .1463755    .238329     0.61   0.539    -.3207409    .6134918
+                |
+    M1[city_id] |          1  (constrained)
+                |
+          _cons |  -5.433446   .3766394   -14.43   0.000    -6.171646   -4.695246
+   ln(t_pop102) |          1  (exposure)
+----------------+----------------------------------------------------------------
+hrM5 <-         |
+                |
+   interval2010 |
+             2  |   .3005699   .0642342     4.68   0.000     .1746732    .4264667
+             3  |   .3714585   .0880772     4.22   0.000     .1988303    .5440866
+             4  |   .3532686   .1058995     3.34   0.001     .1457093    .5608278
+                |
+       t_disd40 |   .2948017   .0570006     5.17   0.000     .1830826    .4065208
+      t_pcblk40 |   -.176855   .0826904    -2.14   0.032    -.3389251   -.0147848
+      t_medhv40 |   .0000436   .0000108     4.04   0.000     .0000225    .0000647
+       t_lnpo22 |  -.2618839   .0264811    -9.89   0.000     -.313786   -.2099819
+        t_frbr2 |  -.0100498   .0061265    -1.64   0.101    -.0220574    .0019579
+        t_m5242 |   .0017572   .0046859     0.37   0.708     -.007427    .0109413
+        t_dsdc2 |    .479804   .0318906    15.05   0.000     .4172997    .5423084
+       c_pop082 |  -2.02e-07   1.55e-07    -1.31   0.191    -5.05e-07    1.01e-07
+        c_pblk2 |    .000946   .0059682     0.16   0.874    -.0107515    .0126436
+       c_phisp2 |   .0089706   .0081714     1.10   0.272     -.007045    .0249862
+        c_dsdc2 |  -.1958626    .165005    -1.19   0.235    -.5192664    .1275411
+       c_pmov52 |  -.0500718   .0279038    -1.79   0.073    -.1047623    .0046186
+        c_pvac2 |   .0392046   .0211153     1.86   0.063    -.0021805    .0805897
+       c_dswb12 |   .0223832   .0061121     3.66   0.000     .0104038    .0343626
+       c_south2 |  -.0509579   .1400392    -0.36   0.716    -.3254297    .2235138
+        c_west2 |   .1398232   .2164682     0.65   0.518    -.2844467    .5640931
+                |
+    M1[city_id] |   .9406584   .0496905    18.93   0.000     .8432669     1.03805
+                |
+          _cons |  -5.181406   .3416863   -15.16   0.000    -5.851099   -4.511713
+   ln(t_pop102) |          1  (exposure)
+----------------+----------------------------------------------------------------
+hrM2            |
+       /lnalpha |  -.6580134   .1088206    -6.05   0.000    -.8712978    -.444729
+----------------+----------------------------------------------------------------
+hrM5            |
+       /lnalpha |  -.9119227   .1166062    -7.82   0.000    -1.140467   -.6833788
+----------------+----------------------------------------------------------------
+var(M1[city_id])|   .0841549   .0366456                      .0358444    .1975779
+---------------------------------------------------------------------------------
+
+.         
+.         est store gsemvio2_5
+
+. 
+. **m2 v m6
+. gsem (hrM2 <- i.interval2010 t_disd40 t_pcblk40 t_medhv40 t_lnpo22 t_frbr2 t_m5242 c_pop082 c_pblk2 c_phisp2 c_d
+> sdc2 c_pmov52 c_pvac2 c_dswb12 c_south2 c_west2 M1[city_id], nbreg exp (t_pop102)) ///  
+>         (hrM6 <- i.interval2010 t_disd40 t_pcblk40 t_medhv40 t_lnpo22 t_frbr2 t_m5242 i.nraceth_new2 t_lgloanhu 
+> t_pvac2 t_f4ro10 t_homeown2 t_dsdc2 c_pop082 c_pblk2 c_phisp2 c_dsdc2 c_pmov52 c_pvac2 c_dswb12 c_south2 M1[city
+> _id], nbreg exp (t_pop102)),vce(cluster city_id)
+
+Fitting fixed-effects model:
+
+Iteration 0:   log likelihood =  -37951.62  
+Iteration 1:   log likelihood = -37275.194  
+Iteration 2:   log likelihood = -36856.636  
+Iteration 3:   log likelihood = -36852.907  
+Iteration 4:   log likelihood = -36852.904  
+
+Refining starting values:
+
+Grid node 0:   log likelihood = -36643.071
+
+Fitting full model:
+
+Iteration 0:   log pseudolikelihood = -36643.071  (not concave)
+Iteration 1:   log pseudolikelihood = -36636.062  (not concave)
+Iteration 2:   log pseudolikelihood = -36629.228  (not concave)
+Iteration 3:   log pseudolikelihood =  -36626.48  (not concave)
+Iteration 4:   log pseudolikelihood =  -36618.78  
+Iteration 5:   log pseudolikelihood = -36613.588  
+Iteration 6:   log pseudolikelihood = -36603.849  
+Iteration 7:   log pseudolikelihood = -36601.156  
+Iteration 8:   log pseudolikelihood = -36601.145  
+Iteration 9:   log pseudolikelihood = -36601.145  
+
+Generalized structural equation model           Number of obs     =      3,821
+
+Response       : hrM2
+Family         : nbinomial
+Dispersion     : mean
+Link           : log
+
+Response       : hrM6
+Family         : nbinomial
+Dispersion     : mean
+Link           : log
+
+Log pseudolikelihood = -36601.145
+
+ ( 1)  [hrM2]M1[city_id] = 1
+                                  (Std. Err. adjusted for 27 clusters in city_id)
+---------------------------------------------------------------------------------
+                |               Robust
+                |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+----------------+----------------------------------------------------------------
+hrM2 <-         |
+                |
+   interval2010 |
+             2  |   .5092432   .1089824     4.67   0.000     .2956416    .7228448
+             3  |   .7964939   .1636337     4.87   0.000     .4757778     1.11721
+             4  |   .7609341   .2153049     3.53   0.000     .3389443    1.182924
+                |
+       t_disd40 |   .2828919   .0806277     3.51   0.000     .1248645    .4409194
+      t_pcblk40 |   .0163064    .101513     0.16   0.872    -.1826553    .2152682
+      t_medhv40 |   .0000296   .0000137     2.16   0.031     2.68e-06    .0000565
+       t_lnpo22 |  -.2634939   .0303023    -8.70   0.000    -.3228852   -.2041026
+        t_frbr2 |  -.0093888   .0080029    -1.17   0.241    -.0250742    .0062967
+        t_m5242 |   .0240673    .007396     3.25   0.001     .0095714    .0385632
+       c_pop082 |  -1.71e-07   1.49e-07    -1.15   0.251    -4.64e-07    1.21e-07
+        c_pblk2 |  -.0028262   .0072833    -0.39   0.698    -.0171012    .0114487
+       c_phisp2 |    .005298   .0089804     0.59   0.555    -.0123032    .0228992
+        c_dsdc2 |   .0364869   .1795524     0.20   0.839    -.3154295    .3884032
+       c_pmov52 |  -.0568422   .0301592    -1.88   0.059    -.1159531    .0022688
+        c_pvac2 |   .0425511   .0265694     1.60   0.109    -.0095241    .0946262
+       c_dswb12 |   .0220523   .0061638     3.58   0.000     .0099714    .0341332
+       c_south2 |  -.0211448   .1385444    -0.15   0.879    -.2926867    .2503972
+        c_west2 |   .0906792   .1050192     0.86   0.388    -.1151547    .2965131
+                |
+    M1[city_id] |          1  (constrained)
+                |
+          _cons |  -5.363409   .4797055   -11.18   0.000    -6.303615   -4.423204
+   ln(t_pop102) |          1  (exposure)
+----------------+----------------------------------------------------------------
+hrM6 <-         |
+                |
+   interval2010 |
+             2  |   .2419375   .0520358     4.65   0.000     .1399492    .3439258
+             3  |   .2590224   .0839085     3.09   0.002     .0945648      .42348
+             4  |   .2621894   .1300294     2.02   0.044     .0073364    .5170423
+                |
+       t_disd40 |   .2234125   .0642725     3.48   0.001     .0974407    .3493844
+      t_pcblk40 |  -.3271636   .0837661    -3.91   0.000    -.4913421   -.1629851
+      t_medhv40 |   .0000232   9.24e-06     2.51   0.012     5.08e-06    .0000413
+       t_lnpo22 |  -.1413236   .0295079    -4.79   0.000    -.1991581   -.0834891
+        t_frbr2 |  -.0086345    .003587    -2.41   0.016    -.0156648   -.0016041
+        t_m5242 |  -.0037055   .0050471    -0.73   0.463    -.0135976    .0061865
+                |
+   nraceth_new2 |
+   Black-NNCS2  |    .674334   .1299751     5.19   0.000     .4195875    .9290806
+  Latino-NNCS2  |   .3313626   .0641334     5.17   0.000     .2056635    .4570617
+   Minor-NNCS2  |    .673227   .0703074     9.58   0.000      .535427     .811027
+ W-B Int-NNCS2  |   .4345724   .0722748     6.01   0.000     .2929164    .5762284
+ W-H Int-NNCS2  |   .1561603   .0646904     2.41   0.016     .0293696    .2829511
+ Oth Int-NNCS2  |   .3774932   .0687195     5.49   0.000     .2428055    .5121809
+                |
+     t_lgloanhu |  -.0406046   .0345421    -1.18   0.240    -.1083059    .0270967
+        t_pvac2 |   .0069089   .0023196     2.98   0.003     .0023626    .0114553
+       t_f4ro10 |   .0015098   .0003663     4.12   0.000     .0007919    .0022278
+     t_homeown2 |  -.0089916   .0008429   -10.67   0.000    -.0106436   -.0073396
+        t_dsdc2 |   .1920106   .0621751     3.09   0.002     .0701496    .3138716
+       c_pop082 |  -1.67e-07   1.48e-07    -1.13   0.260    -4.58e-07    1.24e-07
+        c_pblk2 |  -.0024318   .0065854    -0.37   0.712     -.015339    .0104753
+       c_phisp2 |    .002743   .0081378     0.34   0.736    -.0132067    .0186928
+        c_dsdc2 |  -.1411939   .1629655    -0.87   0.386    -.4606004    .1782126
+       c_pmov52 |  -.0456487   .0273461    -1.67   0.095    -.0992462    .0079487
+        c_pvac2 |   .0273661   .0217809     1.26   0.209    -.0153238    .0700559
+       c_dswb12 |   .0192986   .0059403     3.25   0.001     .0076559    .0309413
+       c_south2 |   .0008397   .1365774     0.01   0.995    -.2668472    .2685265
+                |
+    M1[city_id] |   .9343124   .0619364    15.09   0.000     .8129192    1.055706
+                |
+          _cons |  -4.688402   .4913923    -9.54   0.000    -5.651513   -3.725291
+   ln(t_pop102) |          1  (exposure)
+----------------+----------------------------------------------------------------
+hrM2            |
+       /lnalpha |  -.6548323   .1079298    -6.07   0.000    -.8663709   -.4432938
+----------------+----------------------------------------------------------------
+hrM6            |
+       /lnalpha |  -1.084639   .1352188    -8.02   0.000    -1.349663   -.8196149
+----------------+----------------------------------------------------------------
+var(M1[city_id])|   .0786924   .0373421                      .0310463    .1994599
+---------------------------------------------------------------------------------
+
+. 
+.         est store gsemvio2_6
+
+.         
+.         
+.         
+. **Burgalry
+.         
+. **m1 v m2
+. 
+. gsem (bM1 <-  i.interval2010  M1[city_id], nbreg exp (t_pop102)) ///
+>          (bM2 <- i.interval2010 t_disd40 t_pcblk40 t_medhv40 t_lnpo22 t_frbr2 t_m5242 c_pop082 c_pblk2 c_phisp2 
+> c_dsdc2 c_pmov52 c_pvac2 c_dswb12 c_south2 c_west2 M1[city_id], nbreg exp (t_pop102)), vce(cluster city_id)
+
+Fitting fixed-effects model:
+
+Iteration 0:   log likelihood =  -46421.58  
+Iteration 1:   log likelihood = -46311.065  
+Iteration 2:   log likelihood = -44712.481  
+Iteration 3:   log likelihood = -44679.042  
+Iteration 4:   log likelihood = -44678.923  
+Iteration 5:   log likelihood = -44678.923  
+
+Refining starting values:
+
+Grid node 0:   log likelihood = -43484.495
+
+Fitting full model:
+
+Iteration 0:   log pseudolikelihood = -43484.495  (not concave)
+Iteration 1:   log pseudolikelihood = -43470.773  (not concave)
+Iteration 2:   log pseudolikelihood =  -43463.96  (not concave)
+Iteration 3:   log pseudolikelihood = -43157.443  
+Iteration 4:   log pseudolikelihood = -43084.781  
+Iteration 5:   log pseudolikelihood = -42702.779  (not concave)
+Iteration 6:   log pseudolikelihood = -42605.147  (not concave)
+Iteration 7:   log pseudolikelihood = -42586.075  (not concave)
+Iteration 8:   log pseudolikelihood = -42584.127  
+Iteration 9:   log pseudolikelihood = -42583.137  (backed up)
+Iteration 10:  log pseudolikelihood = -42582.505  (backed up)
+Iteration 11:  log pseudolikelihood = -42581.524  
+Iteration 12:  log pseudolikelihood = -42580.834  
+Iteration 13:  log pseudolikelihood = -42580.289  
+Iteration 14:  log pseudolikelihood = -42579.398  
+Iteration 15:  log pseudolikelihood = -42578.749  
+Iteration 16:  log pseudolikelihood = -42578.243  
+Iteration 17:  log pseudolikelihood = -42577.453  
+Iteration 18:  log pseudolikelihood = -42576.923  
+Iteration 19:  log pseudolikelihood = -42576.546  
+Iteration 20:  log pseudolikelihood = -42576.034  
+Iteration 21:  log pseudolikelihood = -42575.764  
+Iteration 22:  log pseudolikelihood = -42575.512  
+Iteration 23:  log pseudolikelihood = -42575.428  
+Iteration 24:  log pseudolikelihood = -42575.428  
+
+Generalized structural equation model           Number of obs     =      3,897
+
+Response       : bM1
+Family         : nbinomial
+Dispersion     : mean
+Link           : log
+
+Response       : bM2
+Family         : nbinomial
+Dispersion     : mean
+Link           : log
+
+Log pseudolikelihood = -42575.428
+
+ ( 1)  [bM1]M1[city_id] = 1
+                                  (Std. Err. adjusted for 28 clusters in city_id)
+---------------------------------------------------------------------------------
+                |               Robust
+                |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+----------------+----------------------------------------------------------------
+bM1 <-          |
+                |
+   interval2010 |
+             2  |   .0948655   .0757342     1.25   0.210    -.0535708    .2433018
+             3  |   .1800785   .1270126     1.42   0.156    -.0688617    .4290187
+             4  |   .2560396   .1577856     1.62   0.105    -.0532145    .5652937
+                |
+    M1[city_id] |          1  (constrained)
+                |
+          _cons |  -3.098277   .1106809   -27.99   0.000    -3.315208   -2.881347
+   ln(t_pop102) |          1  (exposure)
+----------------+----------------------------------------------------------------
+bM2 <-          |
+                |
+   interval2010 |
+             2  |   .1793757   .0853233     2.10   0.036     .0121451    .3466063
+             3  |    .317426   .1325313     2.40   0.017     .0576695    .5771825
+             4  |   .3678784    .182071     2.02   0.043     .0110257     .724731
+                |
+       t_disd40 |   .0331888   .0380231     0.87   0.383    -.0413351    .1077126
+      t_pcblk40 |  -.1055114   .0454698    -2.32   0.020    -.1946305   -.0163922
+      t_medhv40 |   .0000168   .0000225     0.75   0.455    -.0000272    .0000608
+       t_lnpo22 |  -.1119506   .0224558    -4.99   0.000    -.1559631    -.067938
+        t_frbr2 |  -.0155117   .0028736    -5.40   0.000    -.0211438   -.0098795
+        t_m5242 |   .0049222   .0047424     1.04   0.299    -.0043727     .014217
+       c_pop082 |  -6.37e-10   2.20e-08    -0.03   0.977    -4.38e-08    4.26e-08
+        c_pblk2 |   .0006135   .0020878     0.29   0.769    -.0034786    .0047056
+       c_phisp2 |   .0049809   .0017071     2.92   0.004      .001635    .0083269
+        c_dsdc2 |  -.0181646   .0253513    -0.72   0.474    -.0678522    .0315231
+       c_pmov52 |  -.0011254   .0061566    -0.18   0.855    -.0131921    .0109412
+        c_pvac2 |  -.0020233    .008088    -0.25   0.802    -.0178755    .0138288
+       c_dswb12 |  -.0006101   .0020164    -0.30   0.762    -.0045622    .0033421
+       c_south2 |   .0395765   .0565791     0.70   0.484    -.0713165    .1504694
+        c_west2 |   .1289951   .0764806     1.69   0.092    -.0209041    .2788942
+                |
+    M1[city_id] |   .9010444   .0571467    15.77   0.000      .789039     1.01305
+                |
+          _cons |  -3.026725   .2785915   -10.86   0.000    -3.572754   -2.480695
+   ln(t_pop102) |          1  (exposure)
+----------------+----------------------------------------------------------------
+bM1             |
+       /lnalpha |  -1.404145   .1668862    -8.41   0.000    -1.731236   -1.077054
+----------------+----------------------------------------------------------------
+bM2             |
+       /lnalpha |  -1.589714   .1069924   -14.86   0.000    -1.799415   -1.380012
+----------------+----------------------------------------------------------------
+var(M1[city_id])|   .2939683   .0623393                      .1939964    .4454586
+---------------------------------------------------------------------------------
+
+.         
+.         est store gsemburg1_2           
+
+.         
+.         
+. **m2 v m3       
+. gsem (bM2 <- i.interval2010 t_disd40 t_pcblk40 t_medhv40 t_lnpo22 t_frbr2 t_m5242 c_pop082 c_pblk2 c_phisp2 c_ds
+> dc2 c_pmov52 c_pvac2 c_dswb12 c_south2 c_west2 M1[city_id], nbreg exp (t_pop102)) ///
+>          (bM3 <- i.interval2010 t_disd40 t_pcblk40 t_medhv40 i.nraceth_new2 t_lnpo22 t_frbr2 t_m5242 c_pop082 c_
+> pblk2 c_phisp2 c_dsdc2 c_pmov52 c_pvac2 c_dswb12 c_south2 c_west2 M1[city_id], nbreg exp (t_pop102)), vce(cluste
+> r city_id) 
+
+Fitting fixed-effects model:
+
+Iteration 0:   log likelihood =  -45618.59  
+Iteration 1:   log likelihood = -42880.096  
+Iteration 2:   log likelihood =  -42704.68  
+Iteration 3:   log likelihood = -42693.648  
+Iteration 4:   log likelihood = -42693.622  
+Iteration 5:   log likelihood = -42693.622  
+
+Refining starting values:
+
+Grid node 0:   log likelihood = -41972.749
+
+Fitting full model:
+
+Iteration 0:   log pseudolikelihood = -41972.749  (not concave)
+Iteration 1:   log pseudolikelihood =  -41965.61  (not concave)
+Iteration 2:   log pseudolikelihood =  -41958.46  (not concave)
+Iteration 3:   log pseudolikelihood = -41952.296  (not concave)
+Iteration 4:   log pseudolikelihood = -41947.046  (not concave)
+Iteration 5:   log pseudolikelihood = -41942.654  (not concave)
+Iteration 6:   log pseudolikelihood = -41940.924  
+Iteration 7:   log pseudolikelihood = -41884.885  
+Iteration 8:   log pseudolikelihood = -41825.012  
+Iteration 9:   log pseudolikelihood = -41823.977  
+Iteration 10:  log pseudolikelihood =  -41823.96  
+Iteration 11:  log pseudolikelihood =  -41823.96  
+
+Generalized structural equation model           Number of obs     =      3,897
+
+Response       : bM2
+Family         : nbinomial
+Dispersion     : mean
+Link           : log
+
+Response       : bM3
+Family         : nbinomial
+Dispersion     : mean
+Link           : log
+
+Log pseudolikelihood =  -41823.96
+
+ ( 1)  [bM2]M1[city_id] = 1
+                                  (Std. Err. adjusted for 28 clusters in city_id)
+---------------------------------------------------------------------------------
+                |               Robust
+                |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+----------------+----------------------------------------------------------------
+bM2 <-          |
+                |
+   interval2010 |
+             2  |   .1814303   .0854144     2.12   0.034     .0140212    .3488394
+             3  |    .321977   .1331418     2.42   0.016     .0610238    .5829301
+             4  |   .3696812   .1821225     2.03   0.042     .0127277    .7266347
+                |
+       t_disd40 |   .0405864   .0391181     1.04   0.299    -.0360836    .1172564
+      t_pcblk40 |  -.1238887   .0450731    -2.75   0.006    -.2122304    -.035547
+      t_medhv40 |   .0000179   .0000228     0.78   0.433    -.0000268    .0000626
+       t_lnpo22 |  -.1167985   .0241246    -4.84   0.000    -.1640818   -.0695152
+        t_frbr2 |   -.016006   .0027156    -5.89   0.000    -.0213285   -.0106835
+        t_m5242 |   .0048218    .004724     1.02   0.307     -.004437    .0140806
+       c_pop082 |  -1.07e-07   1.13e-07    -0.95   0.341    -3.29e-07    1.14e-07
+        c_pblk2 |  -.0105527   .0073819    -1.43   0.153     -.025021    .0039156
+       c_phisp2 |  -.0047299   .0051153    -0.92   0.355    -.0147557    .0052959
+        c_dsdc2 |  -.0148708   .1282129    -0.12   0.908    -.2661636    .2364219
+       c_pmov52 |  -.0115441   .0218293    -0.53   0.597    -.0543287    .0312406
+        c_pvac2 |   .0708212   .0229152     3.09   0.002     .0259082    .1157342
+       c_dswb12 |  -.0050073    .010911    -0.46   0.646    -.0263925    .0163779
+       c_south2 |   .3757974   .1830825     2.05   0.040     .0169622    .7346326
+        c_west2 |  -.0174093   .2414459    -0.07   0.943    -.4906345    .4558159
+                |
+    M1[city_id] |          1  (constrained)
+                |
+          _cons |  -2.966828   .5419086    -5.47   0.000     -4.02895   -1.904707
+   ln(t_pop102) |          1  (exposure)
+----------------+----------------------------------------------------------------
+bM3 <-          |
+                |
+   interval2010 |
+             2  |   .0700704   .0663679     1.06   0.291    -.0600082     .200149
+             3  |    .140694   .0933769     1.51   0.132    -.0423214    .3237094
+             4  |   .1830691   .1230184     1.49   0.137    -.0580426    .4241808
+                |
+       t_disd40 |   .0606691   .0366068     1.66   0.097    -.0110789    .1324171
+      t_pcblk40 |  -.3410026   .0782723    -4.36   0.000    -.4944135   -.1875916
+      t_medhv40 |   .0000143    .000018     0.80   0.426    -.0000209    .0000495
+                |
+   nraceth_new2 |
+   Black-NNCS2  |   .6212531   .0924623     6.72   0.000     .4400304    .8024759
+  Latino-NNCS2  |   .3055746    .103388     2.96   0.003     .1029379    .5082113
+   Minor-NNCS2  |   .5787132   .0786851     7.35   0.000     .4244933    .7329331
+ W-B Int-NNCS2  |   .3814619   .0615155     6.20   0.000     .2608937      .50203
+ W-H Int-NNCS2  |   .3477241   .0648954     5.36   0.000     .2205315    .4749168
+ Oth Int-NNCS2  |   .3919037   .0380856    10.29   0.000     .3172572    .4665502
+                |
+       t_lnpo22 |  -.0968133   .0252749    -3.83   0.000    -.1463511   -.0472755
+        t_frbr2 |  -.0147971   .0019397    -7.63   0.000    -.0185988   -.0109955
+        t_m5242 |   .0007742   .0034299     0.23   0.821    -.0059482    .0074967
+       c_pop082 |  -8.68e-08   1.11e-07    -0.78   0.436    -3.05e-07    1.32e-07
+        c_pblk2 |  -.0142566   .0070966    -2.01   0.045    -.0281656   -.0003476
+       c_phisp2 |  -.0088683   .0050152    -1.77   0.077    -.0186979    .0009613
+        c_dsdc2 |   -.004821   .1219325    -0.04   0.968    -.2438043    .2341622
+       c_pmov52 |  -.0033666   .0210969    -0.16   0.873    -.0447158    .0379826
+        c_pvac2 |   .0684451   .0212639     3.22   0.001     .0267687    .1101215
+       c_dswb12 |  -.0055593   .0105948    -0.52   0.600    -.0263247    .0152061
+       c_south2 |   .4051252   .1778677     2.28   0.023     .0565109    .7537395
+        c_west2 |  -.0042056   .2334383    -0.02   0.986    -.4617362     .453325
+                |
+    M1[city_id] |   .9448943   .0189802    49.78   0.000     .9076937    .9820948
+                |
+          _cons |  -3.089387    .487796    -6.33   0.000     -4.04545   -2.133325
+   ln(t_pop102) |          1  (exposure)
+----------------+----------------------------------------------------------------
+bM2             |
+       /lnalpha |  -1.593663   .1067648   -14.93   0.000    -1.802918   -1.384407
+----------------+----------------------------------------------------------------
+bM3             |
+       /lnalpha |  -1.785216   .1239362   -14.40   0.000    -2.028127   -1.542306
+----------------+----------------------------------------------------------------
+var(M1[city_id])|   .0814718   .0265971                      .0429661    .1544857
+---------------------------------------------------------------------------------
+
+.         
+.         est store gsemburg2_3   
+
+. 
+. 
+. **m2 v m4       
+. gsem (bM2 <- i.interval2010 t_disd40 t_pcblk40 t_medhv40 t_lnpo22 t_frbr2 t_m5242 c_pop082 c_pblk2 c_phisp2 c_ds
+> dc2 c_pmov52 c_pvac2 c_dswb12 c_south2 c_west2 M1[city_id], nbreg exp (t_pop102)) ///
+>         (bM4 <- i.interval2010 t_disd40 t_pcblk40 t_medhv40 t_lnpo22 t_frbr2 t_m5242 t_lgloanhu t_pvac2 t_f4ro10
+>  t_homeown2 c_pop082 c_pblk2 c_phisp2 c_dsdc2 c_pmov52 c_pvac2 c_dswb12 c_south2 c_west2 M1[city_id], nbreg exp 
+> (t_pop102)), vce(cluster city_id)
+
+Fitting fixed-effects model:
+
+Iteration 0:   log likelihood =  -45598.19  
+Iteration 1:   log likelihood =  -42797.72  
+Iteration 2:   log likelihood = -42620.627  
+Iteration 3:   log likelihood = -42609.562  
+Iteration 4:   log likelihood = -42609.536  
+Iteration 5:   log likelihood = -42609.536  
+
+Refining starting values:
+
+Grid node 0:   log likelihood = -41958.221
+
+Fitting full model:
+
+Iteration 0:   log pseudolikelihood = -41958.221  (not concave)
+Iteration 1:   log pseudolikelihood = -41951.011  (not concave)
+Iteration 2:   log pseudolikelihood = -41943.791  (not concave)
+Iteration 3:   log pseudolikelihood = -41937.512  (not concave)
+Iteration 4:   log pseudolikelihood = -41932.138  (not concave)
+Iteration 5:   log pseudolikelihood =  -41929.94  (not concave)
+Iteration 6:   log pseudolikelihood = -41928.204  
+Iteration 7:   log pseudolikelihood = -41900.509  
+Iteration 8:   log pseudolikelihood = -41827.539  
+Iteration 9:   log pseudolikelihood =  -41825.96  
+Iteration 10:  log pseudolikelihood = -41825.958  
+
+Generalized structural equation model           Number of obs     =      3,897
+
+Response       : bM2
+Family         : nbinomial
+Dispersion     : mean
+Link           : log
+
+Response       : bM4
+Family         : nbinomial
+Dispersion     : mean
+Link           : log
+
+Log pseudolikelihood = -41825.958
+
+ ( 1)  [bM2]M1[city_id] = 1
+                                  (Std. Err. adjusted for 28 clusters in city_id)
+---------------------------------------------------------------------------------
+                |               Robust
+                |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+----------------+----------------------------------------------------------------
+bM2 <-          |
+                |
+   interval2010 |
+             2  |   .1824876   .0856535     2.13   0.033     .0146098    .3503655
+             3  |   .3226482   .1330181     2.43   0.015     .0619375     .583359
+             4  |   .3739223   .1822306     2.05   0.040     .0167569    .7310876
+                |
+       t_disd40 |    .036028   .0403498     0.89   0.372    -.0430563    .1151122
+      t_pcblk40 |  -.1158839   .0454463    -2.55   0.011     -.204957   -.0268108
+      t_medhv40 |   .0000172   .0000232     0.74   0.460    -.0000284    .0000627
+       t_lnpo22 |  -.1146734   .0243648    -4.71   0.000    -.1624275   -.0669194
+        t_frbr2 |  -.0163207   .0026064    -6.26   0.000    -.0214291   -.0112122
+        t_m5242 |   .0047901   .0047351     1.01   0.312    -.0044904    .0140707
+       c_pop082 |  -1.08e-07   1.13e-07    -0.95   0.340    -3.29e-07    1.14e-07
+        c_pblk2 |  -.0104291    .007347    -1.42   0.156     -.024829    .0039708
+       c_phisp2 |  -.0044415   .0051242    -0.87   0.386    -.0144848    .0056018
+        c_dsdc2 |   -.007564   .1251858    -0.06   0.952    -.2529238    .2377957
+       c_pmov52 |  -.0118951   .0219692    -0.54   0.588    -.0549538    .0311637
+        c_pvac2 |   .0692704   .0225764     3.07   0.002     .0250215    .1135194
+       c_dswb12 |  -.0057351   .0109917    -0.52   0.602    -.0272784    .0158081
+       c_south2 |   .3788778   .1816816     2.09   0.037     .0227883    .7349672
+        c_west2 |  -.0237758   .2405606    -0.10   0.921    -.4952659    .4477142
+                |
+    M1[city_id] |          1  (constrained)
+                |
+          _cons |  -2.903844   .5347829    -5.43   0.000    -3.951999   -1.855689
+   ln(t_pop102) |          1  (exposure)
+----------------+----------------------------------------------------------------
+bM4 <-          |
+                |
+   interval2010 |
+             2  |   .0575177    .050402     1.14   0.254    -.0412685    .1563039
+             3  |   .1066577   .0760414     1.40   0.161    -.0423807    .2556961
+             4  |   .1406222   .1055636     1.33   0.183    -.0662786     .347523
+                |
+       t_disd40 |   .0546655   .0291263     1.88   0.061    -.0024211    .1117521
+      t_pcblk40 |  -.1804093   .0716651    -2.52   0.012    -.3208703   -.0399483
+      t_medhv40 |   .0000199   .0000179     1.11   0.265    -.0000151    .0000549
+       t_lnpo22 |   -.068312   .0230744    -2.96   0.003    -.1135371    -.023087
+        t_frbr2 |  -.0150068   .0023369    -6.42   0.000    -.0195869   -.0104266
+        t_m5242 |  -.0015332   .0022754    -0.67   0.500    -.0059929    .0029266
+     t_lgloanhu |  -.1362748   .0247937    -5.50   0.000    -.1848695     -.08768
+        t_pvac2 |   .0123875   .0035645     3.48   0.001     .0054011    .0193739
+       t_f4ro10 |   .0013548   .0010283     1.32   0.188    -.0006606    .0033702
+     t_homeown2 |   .0022963   .0008471     2.71   0.007     .0006361    .0039565
+       c_pop082 |  -1.32e-07   9.45e-08    -1.40   0.161    -3.18e-07    5.27e-08
+        c_pblk2 |  -.0082206   .0064165    -1.28   0.200    -.0207968    .0043556
+       c_phisp2 |   -.002017   .0043402    -0.46   0.642    -.0105236    .0064896
+        c_dsdc2 |  -.0832522   .1071835    -0.78   0.437    -.2933281    .1268237
+       c_pmov52 |  -.0064845   .0181351    -0.36   0.721    -.0420286    .0290595
+        c_pvac2 |   .0430035   .0180693     2.38   0.017     .0075883    .0784188
+       c_dswb12 |  -.0014844   .0091784    -0.16   0.872    -.0194737     .016505
+       c_south2 |   .3288756   .1554286     2.12   0.034     .0242411    .6335102
+        c_west2 |   .0867893   .1972724     0.44   0.660    -.2998576    .4734361
+                |
+    M1[city_id] |   .8577723   .0347726    24.67   0.000     .7896193    .9259253
+                |
+          _cons |  -2.942478   .4417886    -6.66   0.000    -3.808368   -2.076588
+   ln(t_pop102) |          1  (exposure)
+----------------+----------------------------------------------------------------
+bM2             |
+       /lnalpha |  -1.592543   .1062392   -14.99   0.000    -1.800769   -1.384318
+----------------+----------------------------------------------------------------
+bM4             |
+       /lnalpha |  -1.787676   .1416555   -12.62   0.000    -2.065315   -1.510036
+----------------+----------------------------------------------------------------
+var(M1[city_id])|   .0795027   .0261948                      .0416798    .1516485
+---------------------------------------------------------------------------------
+
+.         
+.         est store gsemburg2_4   
+
+.         
+.         
+. **m2 v m5       
+. gsem (bM2 <- i.interval2010 t_disd40 t_pcblk40 t_medhv40 t_lnpo22 t_frbr2 t_m5242 c_pop082 c_pblk2 c_phisp2 c_ds
+> dc2 c_pmov52 c_pvac2 c_dswb12 c_south2 c_west2 M1[city_id], nbreg exp (t_pop102)) ///   
+>         (bM5 <- i.interval2010 t_disd40 t_pcblk40 t_medhv40 t_lnpo22 t_frbr2 t_m5242 t_dsdc2 c_pop082 c_pblk2 c_
+> phisp2 c_dsdc2 c_pmov52 c_pvac2 c_dswb12 c_south2 c_west2 M1[city_id], nbreg exp (t_pop102)) , vce(cluster city_
+> id)
+
+Fitting fixed-effects model:
+
+Iteration 0:   log likelihood = -45606.108  
+Iteration 1:   log likelihood = -42832.364  
+Iteration 2:   log likelihood = -42656.557  
+Iteration 3:   log likelihood = -42645.759  
+Iteration 4:   log likelihood = -42645.735  
+Iteration 5:   log likelihood = -42645.735  
+
+Refining starting values:
+
+Grid node 0:   log likelihood = -41954.792
+
+Fitting full model:
+
+Iteration 0:   log pseudolikelihood = -41954.792  (not concave)
+Iteration 1:   log pseudolikelihood =  -41947.62  (not concave)
+Iteration 2:   log pseudolikelihood = -41940.438  (not concave)
+Iteration 3:   log pseudolikelihood = -41934.221  (not concave)
+Iteration 4:   log pseudolikelihood = -41928.915  (not concave)
+Iteration 5:   log pseudolikelihood = -41926.744  (not concave)
+Iteration 6:   log pseudolikelihood = -41924.999  
+Iteration 7:   log pseudolikelihood = -41908.888  
+Iteration 8:   log pseudolikelihood = -41820.873  
+Iteration 9:   log pseudolikelihood = -41818.988  
+Iteration 10:  log pseudolikelihood = -41818.987  
+
+Generalized structural equation model           Number of obs     =      3,897
+
+Response       : bM2
+Family         : nbinomial
+Dispersion     : mean
+Link           : log
+
+Response       : bM5
+Family         : nbinomial
+Dispersion     : mean
+Link           : log
+
+Log pseudolikelihood = -41818.987
+
+ ( 1)  [bM2]M1[city_id] = 1
+                                  (Std. Err. adjusted for 28 clusters in city_id)
+---------------------------------------------------------------------------------
+                |               Robust
+                |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+----------------+----------------------------------------------------------------
+bM2 <-          |
+                |
+   interval2010 |
+             2  |   .1826151   .0852721     2.14   0.032     .0154848    .3497453
+             3  |   .3230863   .1314562     2.46   0.014     .0654369    .5807356
+             4  |   .3712293   .1789946     2.07   0.038     .0204063    .7220522
+                |
+       t_disd40 |   .0412304   .0378463     1.09   0.276     -.032947    .1154079
+      t_pcblk40 |  -.1237914   .0444799    -2.78   0.005    -.2109705   -.0366124
+      t_medhv40 |   .0000178   .0000229     0.78   0.438    -.0000272    .0000628
+       t_lnpo22 |  -.1156598   .0244744    -4.73   0.000    -.1636288   -.0676909
+        t_frbr2 |  -.0163559   .0025902    -6.31   0.000    -.0214326   -.0112792
+        t_m5242 |   .0048101   .0047104     1.02   0.307    -.0044221    .0140424
+       c_pop082 |  -1.10e-07   1.13e-07    -0.98   0.328    -3.31e-07    1.11e-07
+        c_pblk2 |  -.0107529   .0074094    -1.45   0.147     -.025275    .0037693
+       c_phisp2 |  -.0044536   .0050924    -0.87   0.382    -.0144346    .0055273
+        c_dsdc2 |  -.0185924   .1275176    -0.15   0.884    -.2685223    .2313375
+       c_pmov52 |  -.0128345    .022056    -0.58   0.561    -.0560634    .0303944
+        c_pvac2 |   .0713875   .0229593     3.11   0.002     .0263881    .1163869
+       c_dswb12 |  -.0049192    .010937    -0.45   0.653    -.0263554     .016517
+       c_south2 |   .3734987   .1833803     2.04   0.042     .0140799    .7329174
+        c_west2 |  -.0230481   .2423624    -0.10   0.924    -.4980698    .4519735
+                |
+    M1[city_id] |          1  (constrained)
+                |
+          _cons |  -2.945523   .5401666    -5.45   0.000     -4.00423   -1.886816
+   ln(t_pop102) |          1  (exposure)
+----------------+----------------------------------------------------------------
+bM5 <-          |
+                |
+   interval2010 |
+             2  |   .0619646   .0500596     1.24   0.216    -.0361504    .1600796
+             3  |   .0940602    .068332     1.38   0.169    -.0398682    .2279885
+             4  |   .1376576    .098127     1.40   0.161    -.0546678     .329983
+                |
+       t_disd40 |   .0367731   .0307437     1.20   0.232    -.0234835    .0970297
+      t_pcblk40 |  -.2479052   .0631941    -3.92   0.000    -.3717635    -.124047
+      t_medhv40 |   .0000251   .0000153     1.64   0.101    -4.89e-06    .0000551
+       t_lnpo22 |  -.1228574   .0259404    -4.74   0.000    -.1736997   -.0720152
+        t_frbr2 |  -.0169608   .0023551    -7.20   0.000    -.0215766    -.012345
+        t_m5242 |  -.0054165   .0032541    -1.66   0.096    -.0117945    .0009615
+        t_dsdc2 |   .2645883   .0340777     7.76   0.000     .1977973    .3313793
+       c_pop082 |  -1.22e-07   9.99e-08    -1.22   0.222    -3.18e-07    7.39e-08
+        c_pblk2 |  -.0082691   .0066707    -1.24   0.215    -.0213435    .0048052
+       c_phisp2 |  -.0022097   .0046791    -0.47   0.637    -.0113806    .0069612
+        c_dsdc2 |   -.141985   .1171654    -1.21   0.226    -.3716249     .087655
+       c_pmov52 |  -.0085941     .01937    -0.44   0.657    -.0465586    .0293704
+        c_pvac2 |   .0663316   .0192433     3.45   0.001     .0286154    .1040478
+       c_dswb12 |  -.0038397   .0095773    -0.40   0.688    -.0226109    .0149314
+       c_south2 |   .3690947    .161978     2.28   0.023     .0516236    .6865657
+        c_west2 |   .0327901   .2145014     0.15   0.879     -.387625    .4532052
+                |
+    M1[city_id] |   .8957714    .022363    40.06   0.000     .8519408    .9396021
+                |
+          _cons |  -2.895145   .4706856    -6.15   0.000    -3.817672   -1.972618
+   ln(t_pop102) |          1  (exposure)
+----------------+----------------------------------------------------------------
+bM2             |
+       /lnalpha |  -1.593814   .1066323   -14.95   0.000    -1.802809   -1.384819
+----------------+----------------------------------------------------------------
+bM5             |
+       /lnalpha |  -1.789698   .1345437   -13.30   0.000    -2.053398   -1.525997
+----------------+----------------------------------------------------------------
+var(M1[city_id])|   .0815766   .0265875                      .0430667    .1545218
+---------------------------------------------------------------------------------
+
+.         
+.         est store gsemburg2_5
+
+. 
+. **m2 v m6
+. gsem (bM2 <- i.interval2010 t_disd40 t_pcblk40 t_medhv40 t_lnpo22 t_frbr2 t_m5242 c_pop082 c_pblk2 c_phisp2 c_ds
+> dc2 c_pmov52 c_pvac2 c_dswb12 c_south2 c_west2 M1[city_id], nbreg exp (t_pop102)) ///   
+>         (bM6 <- i.interval2010 t_disd40 t_pcblk40 t_medhv40 t_lnpo22 t_frbr2 t_m5242 i.nraceth_new2 t_lgloanhu t
+> _pvac2 t_f4ro10 t_homeown2 t_dsdc2 c_pop082 c_pblk2 c_phisp2 c_dsdc2 c_pmov52 c_pvac2 c_dswb12 c_south2 M1[city_
+> id], nbreg exp (t_pop102)), vce(cluster city_id)
+
+Fitting fixed-effects model:
+
+Iteration 0:   log likelihood = -45566.088  
+Iteration 1:   log likelihood = -42653.974  
+Iteration 2:   log likelihood = -42469.948  
+Iteration 3:   log likelihood = -42457.423  
+Iteration 4:   log likelihood = -42457.391  
+Iteration 5:   log likelihood = -42457.391  
+
+Refining starting values:
+
+Grid node 0:   log likelihood = -41791.146
+
+Fitting full model:
+
+Iteration 0:   log pseudolikelihood = -41791.146  (not concave)
+Iteration 1:   log pseudolikelihood = -41784.022  (not concave)
+Iteration 2:   log pseudolikelihood = -41776.887  (not concave)
+Iteration 3:   log pseudolikelihood = -41770.725  (not concave)
+Iteration 4:   log pseudolikelihood = -41765.473  (not concave)
+Iteration 5:   log pseudolikelihood = -41761.096  (not concave)
+Iteration 6:   log pseudolikelihood =  -41754.26  
+Iteration 7:   log pseudolikelihood = -41664.308  
+Iteration 8:   log pseudolikelihood = -41643.529  
+Iteration 9:   log pseudolikelihood =  -41643.27  
+Iteration 10:  log pseudolikelihood = -41643.265  
+Iteration 11:  log pseudolikelihood = -41643.265  
+
+Generalized structural equation model           Number of obs     =      3,897
+
+Response       : bM2
+Family         : nbinomial
+Dispersion     : mean
+Link           : log
+
+Response       : bM6
+Family         : nbinomial
+Dispersion     : mean
+Link           : log
+
+Log pseudolikelihood = -41643.265
+
+ ( 1)  [bM2]M1[city_id] = 1
+                                  (Std. Err. adjusted for 28 clusters in city_id)
+---------------------------------------------------------------------------------
+                |               Robust
+                |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+----------------+----------------------------------------------------------------
+bM2 <-          |
+                |
+   interval2010 |
+             2  |   .1817981   .0853979     2.13   0.033     .0144214    .3491748
+             3  |   .3217154   .1331482     2.42   0.016     .0607498    .5826811
+             4  |   .3718467   .1825202     2.04   0.042     .0141138    .7295797
+                |
+       t_disd40 |   .0383673   .0398334     0.96   0.335    -.0397048    .1164393
+      t_pcblk40 |  -.1192836   .0448421    -2.66   0.008    -.2071724   -.0313947
+      t_medhv40 |   .0000178   .0000229     0.78   0.437     -.000027    .0000626
+       t_lnpo22 |  -.1163386    .024089    -4.83   0.000    -.1635521   -.0691251
+        t_frbr2 |  -.0160869   .0026811    -6.00   0.000    -.0213417   -.0108321
+        t_m5242 |    .004893   .0047472     1.03   0.303    -.0044114    .0141974
+       c_pop082 |  -1.04e-07   1.10e-07    -0.94   0.345    -3.19e-07    1.11e-07
+        c_pblk2 |  -.0101717   .0073156    -1.39   0.164      -.02451    .0041666
+       c_phisp2 |  -.0043063   .0053774    -0.80   0.423    -.0148457    .0062332
+        c_dsdc2 |  -.0173993    .114172    -0.15   0.879    -.2411723    .2063737
+       c_pmov52 |  -.0120927   .0231004    -0.52   0.601    -.0573686    .0331831
+        c_pvac2 |   .0694432   .0229795     3.02   0.003     .0244042    .1144822
+       c_dswb12 |  -.0059936   .0094108    -0.64   0.524    -.0244384    .0124513
+       c_south2 |   .3635721   .1115911     3.26   0.001     .1448577    .5822866
+        c_west2 |  -.0463568   .0509628    -0.91   0.363    -.1462421    .0535284
+                |
+    M1[city_id] |          1  (constrained)
+                |
+          _cons |  -2.891004   .4856728    -5.95   0.000    -3.842905   -1.939102
+   ln(t_pop102) |          1  (exposure)
+----------------+----------------------------------------------------------------
+bM6 <-          |
+                |
+   interval2010 |
+             2  |   .0541301   .0496433     1.09   0.276    -.0431691    .1514292
+             3  |   .0806362   .0672744     1.20   0.231    -.0512193    .2124916
+             4  |   .1145323   .0872769     1.31   0.189    -.0565273    .2855918
+                |
+       t_disd40 |   .0585117   .0315538     1.85   0.064    -.0033327     .120356
+      t_pcblk40 |  -.2938787   .0737564    -3.98   0.000    -.4384386   -.1493189
+      t_medhv40 |   .0000204   .0000157     1.30   0.194    -.0000104    .0000512
+       t_lnpo22 |  -.0820482   .0257768    -3.18   0.001    -.1325697   -.0315266
+        t_frbr2 |  -.0145289   .0019185    -7.57   0.000    -.0182891   -.0107686
+        t_m5242 |  -.0034809   .0029855    -1.17   0.244    -.0093323    .0023705
+                |
+   nraceth_new2 |
+   Black-NNCS2  |   .2732323   .0661085     4.13   0.000     .1436619    .4028026
+  Latino-NNCS2  |   .0201914   .0891426     0.23   0.821    -.1545249    .1949076
+   Minor-NNCS2  |   .2751179   .0604297     4.55   0.000     .1566778    .3935579
+ W-B Int-NNCS2  |    .228097   .0552655     4.13   0.000     .1197787    .3364153
+ W-H Int-NNCS2  |   .2115778   .0486824     4.35   0.000     .1161621    .3069936
+ Oth Int-NNCS2  |   .2454343    .027109     9.05   0.000     .1923016    .2985671
+                |
+     t_lgloanhu |   .0021532   .0277809     0.08   0.938    -.0522963    .0566027
+        t_pvac2 |   .0091934    .002606     3.53   0.000     .0040857    .0143011
+       t_f4ro10 |   .0008307   .0007799     1.07   0.287     -.000698    .0023593
+     t_homeown2 |   .0022526   .0007672     2.94   0.003      .000749    .0037563
+        t_dsdc2 |   .1624591   .0291825     5.57   0.000     .1052625    .2196558
+       c_pop082 |  -9.83e-08   9.32e-08    -1.05   0.292    -2.81e-07    8.44e-08
+        c_pblk2 |  -.0109309     .00627    -1.74   0.081    -.0232199     .001358
+       c_phisp2 |  -.0049745   .0048351    -1.03   0.304    -.0144511    .0045022
+        c_dsdc2 |  -.0645289   .1001441    -0.64   0.519    -.2608078      .13175
+       c_pmov52 |   -.001358   .0200427    -0.07   0.946     -.040641     .037925
+        c_pvac2 |   .0536823   .0186116     2.88   0.004     .0172042    .0901604
+       c_dswb12 |  -.0037971   .0077471    -0.49   0.624    -.0189811    .0113869
+       c_south2 |   .3832869   .1006608     3.81   0.000     .1859954    .5805784
+                |
+    M1[city_id] |   .8599998   .0234387    36.69   0.000     .8140608    .9059388
+                |
+          _cons |  -3.279468   .3885605    -8.44   0.000    -4.041033   -2.517904
+   ln(t_pop102) |          1  (exposure)
+----------------+----------------------------------------------------------------
+bM2             |
+       /lnalpha |  -1.593037   .1063575   -14.98   0.000    -1.801493    -1.38458
+----------------+----------------------------------------------------------------
+bM6             |
+       /lnalpha |  -1.887344   .1417431   -13.32   0.000    -2.165156   -1.609533
+----------------+----------------------------------------------------------------
+var(M1[city_id])|   .0806004   .0262751                      .0425453    .1526943
+---------------------------------------------------------------------------------
+
+. 
+.         est store gsemburg2_6
+
+. 
+. 
+. ****************************************************************        
+. //  Compare marginal effects for multi-category nominal IVs
+. ****************************************************************        
+. 
+.  *make predictions for each HOLC grade and then calculate 
+. *        differences between grades for average discrete change
+. 
+. *----------------------------
+. **VIOLENCE
+. *----------------------------
+. 
+. *Models 1 vs 2**/
+. 
+. est restore gsemvio1_2
+(results gsemvio1_2 are active now)
+
+. margins i.interval2010, post 
+
+Predictive margins                              Number of obs     =      3,821
+Model VCE    : Robust
+
+1._predict   : Marginal predicted mean (M1 base model), predict(mu outcome(hrM1))
+2._predict   : Marginal predicted mean (M2 basemodel + control), predict(mu outcome(hrM2))
+
+---------------------------------------------------------------------------------------
+                      |            Delta-method
+                      |     Margin   Std. Err.      z    P>|z|     [95% Conf. Interval]
+----------------------+----------------------------------------------------------------
+_predict#interval2010 |
+                 1 1  |   27.87439   4.148641     6.72   0.000      19.7432    36.00558
+                 1 2  |   47.05361   5.193238     9.06   0.000     36.87505    57.23217
+                 1 3  |   69.96277   5.807333    12.05   0.000     58.58061    81.34494
+                 1 4  |   85.45972   7.981495    10.71   0.000     69.81627    101.1032
+                 2 1  |   31.19334   5.474202     5.70   0.000      20.4641    41.92258
+                 2 2  |   51.69824   5.693517     9.08   0.000     40.53915    62.85733
+                 2 3  |   69.07671   5.479091    12.61   0.000     58.33789    79.81553
+                 2 4  |   67.97154   7.937101     8.56   0.000     52.41511    83.52797
+---------------------------------------------------------------------------------------
+
+. qui mlincom 1,   rowname(m1 A) stat(est se p) clear
+
+. qui mlincom 2,   rowname(m1 B) stat(est se p) add
+
+. qui mlincom 3,   rowname(m1 C) stat(est se p) add
+
+. qui mlincom 4,   rowname(m1 D) stat(est se p) add
+
+. qui mlincom 5,   rowname(m2 A) stat(est se p) add
+
+. qui mlincom 6,   rowname(m2 B) stat(est se p) add
+
+. qui mlincom 7,   rowname(m2 C) stat(est se p) add
+
+. qui mlincom 8,   rowname(m2 D) stat(est se p) add
+
+. 
+. 
+. qui mlincom (2-1), rowname(Diff in ADCs: M1b - M1a) stat(est se p) add
+
+. qui mlincom (3-1), rowname(Diff in ADCs: M1c - M1a) stat(est se p) add
+
+. qui mlincom (4-1), rowname(Diff in ADCs: M1d - M1a) stat(est se p) add
+
+. qui mlincom (6-5), rowname(Diff in ADCs: M2b - M2a) stat(est se p) add
+
+. qui mlincom (7-5), rowname(Diff in ADCs: M2c - M2a) stat(est se p) add 
+
+. qui mlincom (8-5), rowname(Diff in ADCs: M2d - M2a) stat(est se p) add
+
+. 
+. qui mlincom (2-1) - (6-5), rowname (BA Gap m 1_2) stat(est se p) add
+
+. qui mlincom (3-1) - (7-5), rowname(CA Gap m 1_2) stat(est se p) add
+
+. mlincom (4-1) - (8-5), rowname(DA Gap m 1_2) stat(est se p) add twidth(15)
+
+                |   lincom        se    pvalue 
+----------------+------------------------------
+                |                              
+           m1 A |   27.874     4.149     0.000 
+           m1 B |   47.054     5.193     0.000 
+           m1 C |   69.963     5.807     0.000 
+           m1 D |   85.460     7.981     0.000 
+           m2 A |   31.193     5.474     0.000 
+           m2 B |   51.698     5.694     0.000 
+           m2 C |   69.077     5.479     0.000 
+           m2 D |   67.972     7.937     0.000 
+----------------+------------------------------
+Diff in ADCs    |                              
+      M1b - M1a |   19.179     2.938     0.000 
+      M1c - M1a |   42.088     4.380     0.000 
+      M1d - M1a |   57.585     6.379     0.000 
+      M2b - M2a |   20.505     3.524     0.000 
+      M2c - M2a |   37.883     5.783     0.000 
+      M2d - M2a |   36.778     9.193     0.000 
+----------------+------------------------------
+                |                              
+   BA Gap m 1_2 |   -1.326     1.420     0.351 
+   CA Gap m 1_2 |    4.205     4.095     0.304 
+   DA Gap m 1_2 |   20.807     6.628     0.002 
+
+. 
+. 
+. *Models 2 vs to 3**/
+. 
+. est restore gsemvio2_3
+(results gsemvio2_3 are active now)
+
+. margins i.interval2010, post 
+
+Predictive margins                              Number of obs     =      3,821
+Model VCE    : Robust
+
+1._predict   : Marginal predicted mean (M2 basemodel + control), predict(mu outcome(hrM2))
+2._predict   : Marginal predicted mean (M3 +segregation v. M2), predict(mu outcome(hrM3))
+
+---------------------------------------------------------------------------------------
+                      |            Delta-method
+                      |     Margin   Std. Err.      z    P>|z|     [95% Conf. Interval]
+----------------------+----------------------------------------------------------------
+_predict#interval2010 |
+                 1 1  |    32.2236   5.832519     5.52   0.000     20.79207    43.65512
+                 1 2  |   53.63899   5.276089    10.17   0.000     43.29804    63.97993
+                 1 3  |   71.46264    5.08145    14.06   0.000     61.50319     81.4221
+                 1 4  |   68.93341   7.179459     9.60   0.000     54.86193    83.00489
+                 2 1  |    41.3939   3.731544    11.09   0.000     34.08021    48.70759
+                 2 2  |   59.54153   4.482662    13.28   0.000     50.75567    68.32738
+                 2 3  |   68.04296     4.4361    15.34   0.000     59.34836    76.73755
+                 2 4  |   66.56116   6.353244    10.48   0.000     54.10903    79.01329
+---------------------------------------------------------------------------------------
+
+. qui mlincom 1,   rowname(m2 A) stat(est se p) clear
+
+. qui mlincom 2,   rowname(m2 B) stat(est se p) add
+
+. qui mlincom 3,   rowname(m2 C) stat(est se p) add
+
+. qui mlincom 4,   rowname(m2 D) stat(est se p) add
+
+. qui mlincom 5,   rowname(m3 A) stat(est se p) add
+
+. qui mlincom 6,   rowname(m3 B) stat(est se p) add
+
+. qui mlincom 7,   rowname(m3 C) stat(est se p) add
+
+. qui mlincom 8,   rowname(m3 D) stat(est se p) add
+
+. 
+. 
+. qui mlincom (2-1), rowname(Diff in ADCs: M2b - M2a) stat(est se p) add
+
+. qui mlincom (3-1), rowname(Diff in ADCs: M2c - M2a) stat(est se p) add
+
+. qui mlincom (4-1), rowname(Diff in ADCs: M2d - M2a) stat(est se p) add
+
+. qui mlincom (6-5), rowname(Diff in ADCs: M3b - M3a) stat(est se p) add
+
+. qui mlincom (7-5), rowname(Diff in ADCs: M3c - M3a) stat(est se p) add 
+
+. qui mlincom (8-5), rowname(Diff in ADCs: M3d - M3a) stat(est se p) add
+
+. 
+. qui mlincom (2-1) - (6-5), rowname (BA Gap m 2_3) stat(est se p) add
+
+. qui mlincom (3-1) - (7-5), rowname(CA Gap m 2_3) stat(est se p) add
+
+. mlincom (4-1) - (8-5), rowname(DA Gap m 2_3) stat(est se p) add twidth(15)
+
+                |   lincom        se    pvalue 
+----------------+------------------------------
+                |                              
+           m2 A |   32.224     5.833     0.000 
+           m2 B |   53.639     5.276     0.000 
+           m2 C |   71.463     5.081     0.000 
+           m2 D |   68.933     7.179     0.000 
+           m3 A |   41.394     3.732     0.000 
+           m3 B |   59.542     4.483     0.000 
+           m3 C |   68.043     4.436     0.000 
+           m3 D |   66.561     6.353     0.000 
+----------------+------------------------------
+Diff in ADCs    |                              
+      M2b - M2a |   21.415     3.033     0.000 
+      M2c - M2a |   39.239     5.839     0.000 
+      M2d - M2a |   36.710     9.432     0.000 
+      M3b - M3a |   18.148     2.830     0.000 
+      M3c - M3a |   26.649     4.233     0.000 
+      M3d - M3a |   25.167     7.012     0.000 
+----------------+------------------------------
+                |                              
+   BA Gap m 2_3 |    3.268     2.144     0.127 
+   CA Gap m 2_3 |   12.590     2.397     0.000 
+   DA Gap m 2_3 |   11.543     4.553     0.011 
+
+. 
+. 
+. **M2 vs. M4
+. est restore gsemvio2_4
+(results gsemvio2_4 are active now)
+
+. margins i.interval2010, post 
+
+Predictive margins                              Number of obs     =      3,821
+Model VCE    : Robust
+
+1._predict   : Marginal predicted mean (M2 basemodel + control), predict(mu outcome(hrM2))
+2._predict   : Marginal predicted mean (M4 +housing v. M2), predict(mu outcome(hrM4))
+
+---------------------------------------------------------------------------------------
+                      |            Delta-method
+                      |     Margin   Std. Err.      z    P>|z|     [95% Conf. Interval]
+----------------------+----------------------------------------------------------------
+_predict#interval2010 |
+                 1 1  |   31.88323   5.595002     5.70   0.000     20.91723    42.84924
+                 1 2  |   52.95752   4.924435    10.75   0.000      43.3058    62.60923
+                 1 3  |   70.62381   4.668748    15.13   0.000     61.47323    79.77439
+                 1 4  |    68.2322   7.207195     9.47   0.000     54.10636    82.35805
+                 2 1  |   50.51983   5.377808     9.39   0.000     39.97952    61.06014
+                 2 2  |   62.68825   5.685778    11.03   0.000     51.54433    73.83217
+                 2 3  |   66.32979   4.256332    15.58   0.000     57.98754    74.67205
+                 2 4  |   65.95108   6.109748    10.79   0.000      53.9762    77.92597
+---------------------------------------------------------------------------------------
+
+. qui mlincom 1,   rowname(m2 A) stat(est se p) clear
+
+. qui mlincom 2,   rowname(m2 B) stat(est se p) add
+
+. qui mlincom 3,   rowname(m2 C) stat(est se p) add
+
+. qui mlincom 4,   rowname(m2 D) stat(est se p) add
+
+. qui mlincom 5,   rowname(m4 A) stat(est se p) add
+
+. qui mlincom 6,   rowname(m4 B) stat(est se p) add
+
+. qui mlincom 7,   rowname(m4 C) stat(est se p) add
+
+. qui mlincom 8,   rowname(m4 D) stat(est se p) add
+
+. 
+. 
+. qui mlincom (2-1), rowname(Diff in ADCs: M2b - M2a) stat(est se p) add
+
+. qui mlincom (3-1), rowname(Diff in ADCs: M2c - M2a) stat(est se p) add
+
+. qui mlincom (4-1), rowname(Diff in ADCs: M2d - M2a) stat(est se p) add
+
+. qui mlincom (6-5), rowname(Diff in ADCs: M4b - M4a) stat(est se p) add
+
+. qui mlincom (7-5), rowname(Diff in ADCs: M4c - M4a) stat(est se p) add 
+
+. qui mlincom (8-5), rowname(Diff in ADCs: M4d - M4a) stat(est se p) add
+
+. 
+. qui mlincom (2-1) - (6-5), rowname (BA Gap m 2_4) stat(est se p) add
+
+. qui mlincom (3-1) - (7-5), rowname(CA Gap m 2_4) stat(est se p) add
+
+. mlincom (4-1) - (8-5), rowname(DA Gap m 2_4) stat(est se p) add twidth(15)
+
+                |   lincom        se    pvalue 
+----------------+------------------------------
+                |                              
+           m2 A |   31.883     5.595     0.000 
+           m2 B |   52.958     4.924     0.000 
+           m2 C |   70.624     4.669     0.000 
+           m2 D |   68.232     7.207     0.000 
+           m4 A |   50.520     5.378     0.000 
+           m4 B |   62.688     5.686     0.000 
+           m4 C |   66.330     4.256     0.000 
+           m4 D |   65.951     6.110     0.000 
+----------------+------------------------------
+Diff in ADCs    |                              
+      M2b - M2a |   21.074     2.951     0.000 
+      M2c - M2a |   38.741     5.740     0.000 
+      M2d - M2a |   36.349     9.473     0.000 
+      M4b - M4a |   12.168     3.082     0.000 
+      M4c - M4a |   15.810     5.064     0.002 
+      M4d - M4a |   15.431     8.067     0.056 
+----------------+------------------------------
+                |                              
+   BA Gap m 2_4 |    8.906     2.177     0.000 
+   CA Gap m 2_4 |   22.931     2.751     0.000 
+   DA Gap m 2_4 |   20.918     4.129     0.000 
+
+. 
+. 
+. **M2 vs. M5
+. est restore gsemvio2_5
+(results gsemvio2_5 are active now)
+
+. margins i.interval2010, post 
+
+Predictive margins                              Number of obs     =      3,821
+Model VCE    : Robust
+
+1._predict   : Marginal predicted mean (M2 basemodel + control), predict(mu outcome(hrM2))
+2._predict   : Marginal predicted mean (M5 +disad v. M2), predict(mu outcome(hrM5))
+
+---------------------------------------------------------------------------------------
+                      |            Delta-method
+                      |     Margin   Std. Err.      z    P>|z|     [95% Conf. Interval]
+----------------------+----------------------------------------------------------------
+_predict#interval2010 |
+                 1 1  |   32.39175    5.75275     5.63   0.000     21.11656    43.66693
+                 1 2  |   53.71892   5.155373    10.42   0.000     43.61458    63.82327
+                 1 3  |   71.54051   4.983805    14.35   0.000     61.77243    81.30859
+                 1 4  |   69.07179   7.108539     9.72   0.000     55.13931    83.00427
+                 2 1  |   46.10933   4.561606    10.11   0.000     37.16874    55.04991
+                 2 2  |   62.27656   4.862887    12.81   0.000     52.74548    71.80765
+                 2 3  |    66.8515   4.376221    15.28   0.000     58.27426    75.42873
+                 2 4  |   65.64647   5.827439    11.27   0.000      54.2249    77.06804
+---------------------------------------------------------------------------------------
+
+. qui mlincom 1,   rowname(m2 A) stat(est se p) clear
+
+. qui mlincom 2,   rowname(m2 B) stat(est se p) add
+
+. qui mlincom 3,   rowname(m2 C) stat(est se p) add
+
+. qui mlincom 4,   rowname(m2 D) stat(est se p) add
+
+. qui mlincom 5,   rowname(m5 A) stat(est se p) add
+
+. qui mlincom 6,   rowname(m5 B) stat(est se p) add
+
+. qui mlincom 7,   rowname(m5 C) stat(est se p) add
+
+. qui mlincom 8,   rowname(m5 D) stat(est se p) add
+
+. 
+. 
+. qui mlincom (2-1), rowname(Diff in ADCs: M2b - M2a) stat(est se p) add
+
+. qui mlincom (3-1), rowname(Diff in ADCs: M2c - M2a) stat(est se p) add
+
+. qui mlincom (4-1), rowname(Diff in ADCs: M2d - M2a) stat(est se p) add
+
+. qui mlincom (6-5), rowname(Diff in ADCs: M5b - M5a) stat(est se p) add
+
+. qui mlincom (7-5), rowname(Diff in ADCs: M5c - M5a) stat(est se p) add 
+
+. qui mlincom (8-5), rowname(Diff in ADCs: M5d - M5a) stat(est se p) add
+
+. 
+. qui mlincom (2-1) - (6-5), rowname (BA Gap m 2_5) stat(est se p) add
+
+. qui mlincom (3-1) - (7-5), rowname(CA Gap m 2_5) stat(est se p) add
+
+. mlincom (4-1) - (8-5), rowname(DA Gap m 2_5) stat(est se p) add twidth(15)
+
+                |   lincom        se    pvalue 
+----------------+------------------------------
+                |                              
+           m2 A |   32.392     5.753     0.000 
+           m2 B |   53.719     5.155     0.000 
+           m2 C |   71.541     4.984     0.000 
+           m2 D |   69.072     7.109     0.000 
+           m5 A |   46.109     4.562     0.000 
+           m5 B |   62.277     4.863     0.000 
+           m5 C |   66.851     4.376     0.000 
+           m5 D |   65.646     5.827     0.000 
+----------------+------------------------------
+Diff in ADCs    |                              
+      M2b - M2a |   21.327     3.043     0.000 
+      M2c - M2a |   39.149     5.796     0.000 
+      M2d - M2a |   36.680     9.273     0.000 
+      M5b - M5a |   16.167     3.270     0.000 
+      M5c - M5a |   20.742     4.527     0.000 
+      M5d - M5a |   19.537     5.936     0.001 
+----------------+------------------------------
+                |                              
+   BA Gap m 2_5 |    5.160     1.832     0.005 
+   CA Gap m 2_5 |   18.407     2.798     0.000 
+   DA Gap m 2_5 |   17.143     4.857     0.000 
+
+. 
+. 
+. **M2 vs. M6
+. est restore gsemvio2_6
+(results gsemvio2_6 are active now)
+
+. margins i.interval2010, post 
+
+Predictive margins                              Number of obs     =      3,821
+Model VCE    : Robust
+
+1._predict   : Marginal predicted mean (M2 basemodel + control), predict(mu outcome(hrM2))
+2._predict   : Marginal predicted mean (M6 full model), predict(mu outcome(hrM6))
+
+---------------------------------------------------------------------------------------
+                      |            Delta-method
+                      |     Margin   Std. Err.      z    P>|z|     [95% Conf. Interval]
+----------------------+----------------------------------------------------------------
+_predict#interval2010 |
+                 1 1  |   32.04038   5.810941     5.51   0.000     20.65115    43.42962
+                 1 2  |    53.3162   5.330372    10.00   0.000     42.86887    63.76354
+                 1 3  |   71.05761   5.184446    13.71   0.000     60.89628    81.21893
+                 1 4  |   68.57521   7.414387     9.25   0.000     54.04328    83.10715
+                 2 1  |   50.67092   4.902181    10.34   0.000     41.06283    60.27902
+                 2 2  |   64.54029   5.747751    11.23   0.000     53.27491    75.80568
+                 2 3  |   65.65243   4.367325    15.03   0.000     57.09263    74.21223
+                 2 4  |   65.86068   5.948244    11.07   0.000     54.20234    77.51903
+---------------------------------------------------------------------------------------
+
+. qui mlincom 1,   rowname(m2 A) stat(est se p) clear
+
+. qui mlincom 2,   rowname(m2 B) stat(est se p) add
+
+. qui mlincom 3,   rowname(m2 C) stat(est se p) add
+
+. qui mlincom 4,   rowname(m2 D) stat(est se p) add
+
+. qui mlincom 5,   rowname(m6 A) stat(est se p) add
+
+. qui mlincom 6,   rowname(m6 B) stat(est se p) add
+
+. qui mlincom 7,   rowname(m6 C) stat(est se p) add
+
+. qui mlincom 8,   rowname(m6 D) stat(est se p) add
+
+. 
+. 
+. qui mlincom (2-1), rowname(Diff in ADCs: M2b - M2a) stat(est se p) add
+
+. qui mlincom (3-1), rowname(Diff in ADCs: M2c - M2a) stat(est se p) add
+
+. qui mlincom (4-1), rowname(Diff in ADCs: M2d - M2a) stat(est se p) add
+
+. qui mlincom (6-5), rowname(Diff in ADCs: M6b - M6a) stat(est se p) add
+
+. qui mlincom (7-5), rowname(Diff in ADCs: M6c - M6a) stat(est se p) add 
+
+. qui mlincom (8-5), rowname(Diff in ADCs: M6d - M6a) stat(est se p) add
+
+. 
+. qui mlincom (2-1) - (6-5), rowname (BA Gap m 2_6) stat(est se p) add
+
+. qui mlincom (3-1) - (7-5), rowname(CA Gap m 2_6) stat(est se p) add
+
+. mlincom (4-1) - (8-5), rowname(DA Gap m 2_6) stat(est se p) add twidth(15)
+
+                |   lincom        se    pvalue 
+----------------+------------------------------
+                |                              
+           m2 A |   32.040     5.811     0.000 
+           m2 B |   53.316     5.330     0.000 
+           m2 C |   71.058     5.184     0.000 
+           m2 D |   68.575     7.414     0.000 
+           m6 A |   50.671     4.902     0.000 
+           m6 B |   64.540     5.748     0.000 
+           m6 C |   65.652     4.367     0.000 
+           m6 D |   65.861     5.948     0.000 
+----------------+------------------------------
+Diff in ADCs    |                              
+      M2b - M2a |   21.276     3.034     0.000 
+      M2c - M2a |   39.017     5.882     0.000 
+      M2d - M2a |   36.535     9.625     0.000 
+      M6b - M6a |   13.869     3.062     0.000 
+      M6c - M6a |   14.982     4.546     0.001 
+      M6d - M6a |   15.190     7.575     0.045 
+----------------+------------------------------
+                |                              
+   BA Gap m 2_6 |    7.406     2.743     0.007 
+   CA Gap m 2_6 |   24.036     3.093     0.000 
+   DA Gap m 2_6 |   21.345     4.506     0.000 
+
+. 
+. *#########################################
+. *-------------------------------
+. ***BURGLARY****
+. *-------------------------------
+. 
+. *Models 1 vs 2*/
+. 
+. est restore gsemburg1_2
+(results gsemburg1_2 are active now)
+
+. margins i.interval2010, post 
+
+Predictive margins                              Number of obs     =      3,897
+Model VCE    : Robust
+
+1._predict   : Marginal predicted mean (M1 base model), predict(mu outcome(bM1))
+2._predict   : Marginal predicted mean (M2 basemodel + control), predict(mu outcome(bM2))
+
+---------------------------------------------------------------------------------------
+                      |            Delta-method
+                      |     Margin   Std. Err.      z    P>|z|     [95% Conf. Interval]
+----------------------+----------------------------------------------------------------
+_predict#interval2010 |
+                 1 1  |   176.2494   22.34895     7.89   0.000     132.4462    220.0525
+                 1 2  |   193.7881   21.50116     9.01   0.000     151.6466    235.9296
+                 1 3  |   211.0254   22.49148     9.38   0.000     166.9429    255.1078
+                 1 4  |   227.6796   26.35201     8.64   0.000     176.0306    279.3286
+                 2 1  |    143.911   22.13669     6.50   0.000     100.5239    187.2981
+                 2 2  |   172.1853   19.69244     8.74   0.000     133.5888    210.7817
+                 2 3  |   197.6744   19.65016    10.06   0.000     159.1608     236.188
+                 2 4  |   207.9034   23.83804     8.72   0.000     161.1817    254.6251
+---------------------------------------------------------------------------------------
+
+. qui mlincom 1,   rowname(m1 A) stat(est se p) clear
+
+. qui mlincom 2,   rowname(m1 B) stat(est se p) add
+
+. qui mlincom 3,   rowname(m1 C) stat(est se p) add
+
+. qui mlincom 4,   rowname(m1 D) stat(est se p) add
+
+. qui mlincom 5,   rowname(m2 A) stat(est se p) add
+
+. qui mlincom 6,   rowname(m2 B) stat(est se p) add
+
+. qui mlincom 7,   rowname(m2 C) stat(est se p) add
+
+. qui mlincom 8,   rowname(m2 D) stat(est se p) add
+
+. 
+. 
+. qui mlincom (2-1), rowname(Diff in ADCs: M1b - M1a) stat(est se p) add
+
+. qui mlincom (3-1), rowname(Diff in ADCs: M1c - M1a) stat(est se p) add
+
+. qui mlincom (4-1), rowname(Diff in ADCs: M1d - M1a) stat(est se p) add
+
+. qui mlincom (6-5), rowname(Diff in ADCs: M2b - M2a) stat(est se p) add
+
+. qui mlincom (7-5), rowname(Diff in ADCs: M2c - M2a) stat(est se p) add 
+
+. qui mlincom (8-5), rowname(Diff in ADCs: M2d - M2a) stat(est se p) add
+
+. 
+. qui mlincom (2-1) - (6-5), rowname (BA Gap m 1_2) stat(est se p) add
+
+. qui mlincom (3-1) - (7-5), rowname(CA Gap m 1_2) stat(est se p) add
+
+. mlincom (4-1) - (8-5), rowname(DA Gap m 1_2) stat(est se p) add twidth(15)
+
+                |   lincom        se    pvalue 
+----------------+------------------------------
+                |                              
+           m1 A |  176.249    22.349     0.000 
+           m1 B |  193.788    21.501     0.000 
+           m1 C |  211.025    22.491     0.000 
+           m1 D |  227.680    26.352     0.000 
+           m2 A |  143.911    22.137     0.000 
+           m2 B |  172.185    19.692     0.000 
+           m2 C |  197.674    19.650     0.000 
+           m2 D |  207.903    23.838     0.000 
+----------------+------------------------------
+Diff in ADCs    |                              
+      M1b - M1a |   17.539    13.713     0.201 
+      M1c - M1a |   34.776    24.183     0.150 
+      M1d - M1a |   51.430    31.783     0.106 
+      M2b - M2a |   28.274    12.157     0.020 
+      M2c - M2a |   53.763    20.533     0.009 
+      M2d - M2a |   63.992    30.803     0.038 
+----------------+------------------------------
+                |                              
+   BA Gap m 1_2 |  -10.735     8.488     0.206 
+   CA Gap m 1_2 |  -18.987    15.973     0.235 
+   DA Gap m 1_2 |  -12.562    18.423     0.495 
+
+. 
+. 
+. 
+. *Models 2 vs  3**/
+. 
+. est restore gsemburg2_3
+(results gsemburg2_3 are active now)
+
+. margins i.interval2010, post 
+
+Predictive margins                              Number of obs     =      3,897
+Model VCE    : Robust
+
+1._predict   : Marginal predicted mean (M2 basemodel + control), predict(mu outcome(bM2))
+2._predict   : Marginal predicted mean (M3 +segregation v. M2), predict(mu outcome(bM3))
+
+---------------------------------------------------------------------------------------
+                      |            Delta-method
+                      |     Margin   Std. Err.      z    P>|z|     [95% Conf. Interval]
+----------------------+----------------------------------------------------------------
+_predict#interval2010 |
+                 1 1  |    118.205   15.10061     7.83   0.000     88.60838    147.8017
+                 1 2  |   141.7197   10.68741    13.26   0.000     120.7727    162.6666
+                 1 3  |   163.1056   10.60436    15.38   0.000     142.3214    183.8897
+                 1 4  |    171.075   15.41404    11.10   0.000      140.864    201.2859
+                 2 1  |   137.1086   13.46615    10.18   0.000     110.7154    163.5018
+                 2 2  |   147.0604   9.950745    14.78   0.000     127.5573    166.5635
+                 2 3  |   157.8219   10.11807    15.60   0.000     137.9909     177.653
+                 2 4  |   164.6533   12.12172    13.58   0.000     140.8952    188.4115
+---------------------------------------------------------------------------------------
+
+. qui mlincom 1,   rowname(m2 A) stat(est se p) clear
+
+. qui mlincom 2,   rowname(m2 B) stat(est se p) add
+
+. qui mlincom 3,   rowname(m2 C) stat(est se p) add
+
+. qui mlincom 4,   rowname(m2 D) stat(est se p) add
+
+. qui mlincom 5,   rowname(m3 A) stat(est se p) add
+
+. qui mlincom 6,   rowname(m3 B) stat(est se p) add
+
+. qui mlincom 7,   rowname(m3 C) stat(est se p) add
+
+. qui mlincom 8,   rowname(m3 D) stat(est se p) add
+
+. 
+. 
+. qui mlincom (2-1), rowname(Diff in ADCs: M2b - M2a) stat(est se p) add
+
+. qui mlincom (3-1), rowname(Diff in ADCs: M2c - Ma) stat(est se p) add
+
+. qui mlincom (4-1), rowname(Diff in ADCs: M2d - Ma) stat(est se p) add
+
+. qui mlincom (6-5), rowname(Diff in ADCs: M3b - M3a) stat(est se p) add
+
+. qui mlincom (7-5), rowname(Diff in ADCs: M3c - M3a) stat(est se p) add 
+
+. qui mlincom (8-5), rowname(Diff in ADCs: M3d - M3a) stat(est se p) add
+
+. 
+. qui mlincom (2-1) - (6-5), rowname (BA Gap m 2_3) stat(est se p) add
+
+. qui mlincom (3-1) - (7-5), rowname(CA Gap m 2_3) stat(est se p) add
+
+. mlincom (4-1) - (8-5), rowname(DA Gap m 2_3) stat(est se p) add twidth(15)
+
+                |   lincom        se    pvalue 
+----------------+------------------------------
+                |                              
+           m2 A |  118.205    15.101     0.000 
+           m2 B |  141.720    10.687     0.000 
+           m2 C |  163.106    10.604     0.000 
+           m2 D |  171.075    15.414     0.000 
+           m3 A |  137.109    13.466     0.000 
+           m3 B |  147.060     9.951     0.000 
+           m3 C |  157.822    10.118     0.000 
+           m3 D |  164.653    12.122     0.000 
+----------------+------------------------------
+Diff in ADCs    |                              
+      M2b - M2a |   23.515     9.788     0.016 
+       M2c - Ma |   44.901    16.915     0.008 
+       M2d - Ma |   52.870    25.341     0.037 
+      M3b - M3a |    9.952     9.075     0.273 
+      M3c - M3a |   20.713    13.218     0.117 
+      M3d - M3a |   27.545    18.160     0.129 
+----------------+------------------------------
+                |                              
+   BA Gap m 2_3 |   13.563     5.349     0.011 
+   CA Gap m 2_3 |   24.187     6.739     0.000 
+   DA Gap m 2_3 |   25.325    10.226     0.013 
+
+. 
+. 
+. **M2 vs. M4
+. est restore gsemburg2_4
+(results gsemburg2_4 are active now)
+
+. margins i.interval2010, post 
+
+Predictive margins                              Number of obs     =      3,897
+Model VCE    : Robust
+
+1._predict   : Marginal predicted mean (M2 basemodel + control), predict(mu outcome(bM2))
+2._predict   : Marginal predicted mean (M4 +housing v. M2), predict(mu outcome(bM4))
+
+---------------------------------------------------------------------------------------
+                      |            Delta-method
+                      |     Margin   Std. Err.      z    P>|z|     [95% Conf. Interval]
+----------------------+----------------------------------------------------------------
+_predict#interval2010 |
+                 1 1  |   117.5589   14.87395     7.90   0.000     88.40648    146.7113
+                 1 2  |   141.0941   10.43726    13.52   0.000     120.6374    161.5507
+                 1 3  |   162.3229   10.44344    15.54   0.000     141.8541    182.7917
+                 1 4  |   170.8629   15.48973    11.03   0.000     140.5036    201.2222
+                 2 1  |   139.3844   10.62353    13.12   0.000     118.5627    160.2062
+                 2 2  |   147.6366   9.211188    16.03   0.000      129.583    165.6902
+                 2 3  |   155.0726   8.936695    17.35   0.000      137.557    172.5882
+                 2 4  |   160.4301   10.91961    14.69   0.000      139.028    181.8321
+---------------------------------------------------------------------------------------
+
+. qui mlincom 1,   rowname(m2 A) stat(est se p) clear
+
+. qui mlincom 2,   rowname(m2 B) stat(est se p) add
+
+. qui mlincom 3,   rowname(m2 C) stat(est se p) add
+
+. qui mlincom 4,   rowname(m2 D) stat(est se p) add
+
+. qui mlincom 5,   rowname(m4 A) stat(est se p) add
+
+. qui mlincom 6,   rowname(m4 B) stat(est se p) add
+
+. qui mlincom 7,   rowname(m4 C) stat(est se p) add
+
+. qui mlincom 8,   rowname(m4 D) stat(est se p) add
+
+. 
+. 
+. qui mlincom (2-1), rowname(Diff in ADCs: M2b - M2a) stat(est se p) add
+
+. qui mlincom (3-1), rowname(Diff in ADCs: M2c - Ma) stat(est se p) add
+
+. qui mlincom (4-1), rowname(Diff in ADCs: M2d - Ma) stat(est se p) add
+
+. qui mlincom (6-5), rowname(Diff in ADCs: M4b - M4a) stat(est se p) add
+
+. qui mlincom (7-5), rowname(Diff in ADCs: M4c - M4a) stat(est se p) add 
+
+. qui mlincom (8-5), rowname(Diff in ADCs: M4d - M4a) stat(est se p) add
+
+. 
+. qui mlincom (2-1) - (6-5), rowname (BA Gap m 2_4) stat(est se p) add
+
+. qui mlincom (3-1) - (7-5), rowname(CA Gap m 2_4) stat(est se p) add
+
+. mlincom (4-1) - (8-5), rowname(DA Gap m 2_4) stat(est se p) add twidth(15)
+
+                |   lincom        se    pvalue 
+----------------+------------------------------
+                |                              
+           m2 A |  117.559    14.874     0.000 
+           m2 B |  141.094    10.437     0.000 
+           m2 C |  162.323    10.443     0.000 
+           m2 D |  170.863    15.490     0.000 
+           m4 A |  139.384    10.624     0.000 
+           m4 B |  147.637     9.211     0.000 
+           m4 C |  155.073     8.937     0.000 
+           m4 D |  160.430    10.920     0.000 
+----------------+------------------------------
+Diff in ADCs    |                              
+      M2b - M2a |   23.535     9.776     0.016 
+       M2c - Ma |   44.764    16.837     0.008 
+       M2d - Ma |   53.304    25.329     0.035 
+      M4b - M4a |    8.252     7.095     0.245 
+      M4c - M4a |   15.688    10.971     0.153 
+      M4d - M4a |   21.046    15.741     0.181 
+----------------+------------------------------
+                |                              
+   BA Gap m 2_4 |   15.283     5.119     0.003 
+   CA Gap m 2_4 |   29.076     7.822     0.000 
+   DA Gap m 2_4 |   32.258    11.155     0.004 
+
+. 
+. 
+. **M2 vs. M5
+. est restore gsemburg2_5
+(results gsemburg2_5 are active now)
+
+. margins i.interval2010, post 
+
+Predictive margins                              Number of obs     =      3,897
+Model VCE    : Robust
+
+1._predict   : Marginal predicted mean (M2 basemodel + control), predict(mu outcome(bM2))
+2._predict   : Marginal predicted mean (M5 +disad v. M2), predict(mu outcome(bM5))
+
+---------------------------------------------------------------------------------------
+                      |            Delta-method
+                      |     Margin   Std. Err.      z    P>|z|     [95% Conf. Interval]
+----------------------+----------------------------------------------------------------
+_predict#interval2010 |
+                 1 1  |   118.1017   14.94605     7.90   0.000     88.80794    147.3954
+                 1 2  |   141.7636   10.57326    13.41   0.000     121.0404    162.4868
+                 1 3  |   163.1438   10.57802    15.42   0.000     142.4113    183.8763
+                 1 4  |   171.1902   15.19839    11.26   0.000     141.4019    200.9785
+                 2 1  |   140.8617   10.73167    13.13   0.000      119.828    161.8954
+                 2 2  |   149.8663   10.03508    14.93   0.000     130.1979    169.5347
+                 2 3  |   154.7543   8.960401    17.27   0.000     137.1923    172.3164
+                 2 4  |   161.6504   10.87229    14.87   0.000     140.3411    182.9598
+---------------------------------------------------------------------------------------
+
+. qui mlincom 1,   rowname(m2 A) stat(est se p) clear
+
+. qui mlincom 2,   rowname(m2 B) stat(est se p) add
+
+. qui mlincom 3,   rowname(m2 C) stat(est se p) add
+
+. qui mlincom 4,   rowname(m2 D) stat(est se p) add
+
+. qui mlincom 5,   rowname(m5 A) stat(est se p) add
+
+. qui mlincom 6,   rowname(m5 B) stat(est se p) add
+
+. qui mlincom 7,   rowname(m5 C) stat(est se p) add
+
+. qui mlincom 8,   rowname(m5 D) stat(est se p) add
+
+. 
+. 
+. qui mlincom (2-1), rowname(Diff in ADCs: M2b - M2a) stat(est se p) add
+
+. qui mlincom (3-1), rowname(Diff in ADCs: M2c - Ma) stat(est se p) add
+
+. qui mlincom (4-1), rowname(Diff in ADCs: M2d - Ma) stat(est se p) add
+
+. qui mlincom (6-5), rowname(Diff in ADCs: M5b - M5a) stat(est se p) add
+
+. qui mlincom (7-5), rowname(Diff in ADCs: M5c - M5a) stat(est se p) add 
+
+. qui mlincom (8-5), rowname(Diff in ADCs: M5d - M5a) stat(est se p) add
+
+. 
+. qui mlincom (2-1) - (6-5), rowname (BA Gap m 2_5) stat(est se p) add
+
+. qui mlincom (3-1) - (7-5), rowname(CA Gap m 2_5) stat(est se p) add
+
+. mlincom (4-1) - (8-5), rowname(DA Gap m 2_5) stat(est se p) add twidth(15)
+
+                |   lincom        se    pvalue 
+----------------+------------------------------
+                |                              
+           m2 A |  118.102    14.946     0.000 
+           m2 B |  141.764    10.573     0.000 
+           m2 C |  163.144    10.578     0.000 
+           m2 D |  171.190    15.198     0.000 
+           m5 A |  140.862    10.732     0.000 
+           m5 B |  149.866    10.035     0.000 
+           m5 C |  154.754     8.960     0.000 
+           m5 D |  161.650    10.872     0.000 
+----------------+------------------------------
+Diff in ADCs    |                              
+      M2b - M2a |   23.662     9.780     0.016 
+       M2c - Ma |   45.042    16.693     0.007 
+       M2d - Ma |   53.089    24.879     0.033 
+      M5b - M5a |    9.005     7.183     0.210 
+      M5c - M5a |   13.893     9.881     0.160 
+      M5d - M5a |   20.789    14.746     0.159 
+----------------+------------------------------
+                |                              
+   BA Gap m 2_5 |   14.657     4.935     0.003 
+   CA Gap m 2_5 |   31.150     8.505     0.000 
+   DA Gap m 2_5 |   32.300    11.709     0.006 
+
+. 
+. 
+. 
+. **M2 vs. M6
+. est restore gsemburg2_6
+(results gsemburg2_6 are active now)
+
+. margins i.interval2010, post 
+
+Predictive margins                              Number of obs     =      3,897
+Model VCE    : Robust
+
+1._predict   : Marginal predicted mean (M2 basemodel + control), predict(mu outcome(bM2))
+2._predict   : Marginal predicted mean (M6 full model), predict(mu outcome(bM6))
+
+---------------------------------------------------------------------------------------
+                      |            Delta-method
+                      |     Margin   Std. Err.      z    P>|z|     [95% Conf. Interval]
+----------------------+----------------------------------------------------------------
+_predict#interval2010 |
+                 1 1  |   117.9784   14.87025     7.93   0.000     88.83326    147.1236
+                 1 2  |      141.5   10.30017    13.74   0.000      121.312     161.688
+                 1 3  |   162.7503   10.11028    16.10   0.000     142.9345    182.5661
+                 1 4  |   171.1171   15.18779    11.27   0.000     141.3496    200.8847
+                 2 1  |   142.4108    9.91437    14.36   0.000      122.979    161.8426
+                 2 2  |   150.3319   8.903783    16.88   0.000     132.8808     167.783
+                 2 3  |   154.3699   8.689907    17.76   0.000      137.338    171.4018
+                 2 4  |   159.6921   9.665637    16.52   0.000     140.7478    178.6364
+---------------------------------------------------------------------------------------
+
+. qui mlincom 1,   rowname(m2 A) stat(est se p) clear
+
+. qui mlincom 2,   rowname(m2 B) stat(est se p) add
+
+. qui mlincom 3,   rowname(m2 C) stat(est se p) add
+
+. qui mlincom 4,   rowname(m2 D) stat(est se p) add
+
+. qui mlincom 5,   rowname(m6 A) stat(est se p) add
+
+. qui mlincom 6,   rowname(m6 B) stat(est se p) add
+
+. qui mlincom 7,   rowname(m6 C) stat(est se p) add
+
+. qui mlincom 8,   rowname(m6 D) stat(est se p) add
+
+. 
+. 
+. qui mlincom (2-1), rowname(Diff in ADCs: M2b - M2a) stat(est se p) add
+
+. qui mlincom (3-1), rowname(Diff in ADCs: M2c - Ma) stat(est se p) add
+
+. qui mlincom (4-1), rowname(Diff in ADCs: M2d - Ma) stat(est se p) add
+
+. qui mlincom (6-5), rowname(Diff in ADCs: M6b - M6a) stat(est se p) add
+
+. qui mlincom (7-5), rowname(Diff in ADCs: M6c - M6a) stat(est se p) add 
+
+. qui mlincom (8-5), rowname(Diff in ADCs: M6d - M6a) stat(est se p) add
+
+. 
+. qui mlincom (2-1) - (6-5), rowname (BA Gap m 2_6) stat(est se p) add
+
+. qui mlincom (3-1) - (7-5), rowname(CA Gap m 2_6) stat(est se p) add
+
+. mlincom (4-1) - (8-5), rowname(DA Gap m 2_6) stat(est se p) add twidth(15)
+
+                |   lincom        se    pvalue 
+----------------+------------------------------
+                |                              
+           m2 A |  117.978    14.870     0.000 
+           m2 B |  141.500    10.300     0.000 
+           m2 C |  162.750    10.110     0.000 
+           m2 D |  171.117    15.188     0.000 
+           m6 A |  142.411     9.914     0.000 
+           m6 B |  150.332     8.904     0.000 
+           m6 C |  154.370     8.690     0.000 
+           m6 D |  159.692     9.666     0.000 
+----------------+------------------------------
+Diff in ADCs    |                              
+      M2b - M2a |   23.522     9.762     0.016 
+       M2c - Ma |   44.772    16.870     0.008 
+       M2d - Ma |   53.139    25.388     0.036 
+      M6b - M6a |    7.921     7.174     0.270 
+      M6c - M6a |   11.959     9.854     0.225 
+      M6d - M6a |   17.281    13.092     0.187 
+----------------+------------------------------
+                |                              
+   BA Gap m 2_6 |   15.600     4.907     0.001 
+   CA Gap m 2_6 |   32.813     8.318     0.000 
+   DA Gap m 2_6 |   35.857    13.346     0.007 
+
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+end of do-file
+
+. collapse city_id if t_hr2rd !=. & ib1.INTERVAL2010 !=. & t_f4ro10 !=. & t_disd40 !=.
+ib1:  operator invalid
+r(198);
+
+. collapse city_id if t_hr2rd !=. & INTERVAL2010 !=. & t_f4ro10 !=. & t_disd40 !=.
+
+. br
+
+. collapse city_id (count) if t_hr2rd !=. & INTERVAL2010 !=. & t_f4ro10 !=. & t_disd40 !=.
+t_hr2rd not found
+r(111);
+
+. exit, clear
