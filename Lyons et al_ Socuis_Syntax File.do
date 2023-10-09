@@ -67,10 +67,23 @@ sum t_bg2rd  t_hr2rd  i.INTERVAL2010 ib2.INTERVAL2010 i.INTERVAL2010_1 ib2.INTER
 
 //////////////////////////////////////////
 ***table 1 descriptives: city variables
+**This requires for the dataset to be changed through the collapse syntax**
 /////////////////////////////////////////
 
-*** Step 1: use the following syntax to agregate/create mean city-level variables [collapse (mean) c_pop082 c_pblk2 c_phisp2 c_dsdc2 c_pmov52 c_pvac2 c_dswb12 c_south2 c_west2 
-*** if t_bg2rd !=. & INTERVAL2010 !=. & t_f4ro10 !=. & t_disd40 !=., by (city_id)]; Step 2: save as new city-level dataset; Step 3: use a summary command to provide descriptives
+*** Step 1: use the following syntax to aggregate city-level variables so that descriptives can be obtained
+
+collapse (mean) c_pop082 c_pblk2 c_phisp2 c_dsdc2 c_pmov52 c_pvac2 c_dswb12 c_south2 c_west2 if t_bg2rd !=. & INTERVAL2010 !=. & t_f4ro10 !=. & t_disd40 !=., by (city_id)
+
+**Step 2: save as new city-level dataset..**
+
+
+
+*Step 3: use a summary command to provide descriptives*
+
+sum  c_pop082 c_pblk2 c_phisp2 c_dsdc2 c_pmov52 c_pvac2 c_dswb12 c_south2 c_west2, d
+
+**NOTE: The SOCIUS publication reports incorrect City medians (all other city-level descriptives are correct); The above code and steps produce correct medians****
+
 
 //////////////////////////////////////
 ***TABLE 2
