@@ -48,8 +48,7 @@ label variable city_mapped "City mapped by the HOLC"
 label variable t_medhv40 "Median Housing Value in 1940"
 label variable t_pcblk40 "% Black in 1940"
 
-**Racial Composition: can't get this one to work** 
-/** CC: this one works for me **/
+**Racial Composition: 
 label drop nraceth_new2_lab
 label define nraceth_new2_lab 1 "White-NNCS2" 2 "Black-NNCS2" 3 "Latino-NNCS2" 4 "Minor-NNCS2" 5 "W-B Int-NNCS2" 6 "W-H Int-NNCS2" 7 "Oth Int-NNCS2"
 label values nraceth_new2 nraceth_new2_lab
